@@ -1,0 +1,41 @@
+{
+  "Files": [
+    {
+      "Id": "/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/obj/Debug/net8.0/scopedcss/projectbundle/ProyectoBlazor.bundle.scp.css",
+      "PackagePath": "staticwebassets/ProyectoBlazor.bundle.scp.css"
+    },
+    {
+      "Id": "/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/wwwroot/app.css",
+      "PackagePath": "staticwebassets/app.css"
+    },
+    {
+      "Id": "/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/wwwroot/bootstrap/bootstrap.min.css",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css"
+    },
+    {
+      "Id": "/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/wwwroot/bootstrap/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/wwwroot/favicon.png",
+      "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.ProyectoBlazor.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.ProyectoBlazor.props",
+      "PackagePath": "build\\ProyectoBlazor.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.ProyectoBlazor.props",
+      "PackagePath": "buildMultiTargeting\\ProyectoBlazor.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.ProyectoBlazor.props",
+      "PackagePath": "buildTransitive\\ProyectoBlazor.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -1,0 +1,87 @@
+    .tarjeta[b-anxyqb31ws] {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .tarjeta:hover[b-anxyqb31ws] {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .tarjeta-contenido[b-anxyqb31ws] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tarjeta-titulo[b-anxyqb31ws] {
+        margin: 0 0 10px 0;
+        color: #333;
+        font-size: 1.25rem;
+    }
+
+    .tarjeta-descripcion[b-anxyqb31ws] {
+        margin: 0;
+        color: #666;
+        font-size: 0.95rem;
+    }
+    .tarjetas-grid[b-anxyqb31ws] {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+    }
+    .tarjeta[b-anxyqb31ws] {
+        border: 1px solid #d9dee5;
+        border-radius: 10px;
+        padding: 16px;
+        background: #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    .tarjeta h3[b-anxyqb31ws] {
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+
+    .tarjeta p[b-anxyqb31ws] {
+        margin: 0;
+        color: #4b5563;
+    }
+
+	/* Spinner styles */
+	.spinner-container[b-anxyqb31ws] {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 120px;
+	}
+
+	.spinner-border[b-anxyqb31ws] {
+		width: 2.5rem;
+		height: 2.5rem;
+		border: 0.25em solid #0d6efd;
+		border-right-color: transparent;
+		border-radius: 50%;
+		animation: spinner-border-b-anxyqb31ws 0.75s linear infinite;
+	}
+
+	@keyframes spinner-border-b-anxyqb31ws {
+		to { transform: rotate(360deg); }
+	}
+
+	/* Utility to hide text visually but keep it for screen readers */
+	.visually-hidden[b-anxyqb31ws] {
+		position: absolute !important;
+		width: 1px !important;
+		height: 1px !important;
+		padding: 0 !important;
+		margin: -1px !important;
+		overflow: hidden !important;
+		clip: rect(0, 0, 0, 0) !important;
+		white-space: nowrap !important;
+		border: 0 !important;
+	}

@@ -1,0 +1,44 @@
+
+
+<h3>Formulario de Registro</h3>
+
+<div class="card p-3">
+    <EditForm Model="@usuario" OnValidSubmit="RegistrarUsuario">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="nombre">Nombre</label>
+            <InputText id="nombre" class="form-control" @bind-Value="usuario.Nombre" />
+        </div>
+
+        <div class="mb-3">
+            <label for="email">Email</label>
+            <InputText id="email" type="email" class="form-control" @bind-Value="usuario.Email" />
+        </div>
+
+        <div class="mb-3">
+            <label for="password">Contraseña</label>
+            <InputText id="password" type="password" class="form-control" @bind-Value="usuario.Password" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrarse</button>
+    </EditForm>
+</div>
+
+@code {
+    private Usuario usuario = new Usuario();
+
+    private void RegistrarUsuario()
+    {
+        // Acá podés manejar la lógica de registro (guardar en DB, llamar API, etc.)
+        Console.WriteLine($"Usuario registrado: {usuario.Nombre}, {usuario.Email}");
+    }
+
+    public class Usuario
+    {
+        public string Nombre { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+}

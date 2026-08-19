@@ -1,0 +1,96 @@
+@page "/tarjetas"
+@implements IDisposable
+@rendermode InteractiveServer
+
+<PageTitle>Tarjetas</PageTitle>
+
+@* Componente reutilizable que muestra una tarjeta con una breve carga inicial simulada *@
+
+@* Esta sección integra el componente "Alerta" y muestra un mensaje al cargar,
+cuando cargó y si hay un error, por defecto carga un warning*@
+@if (isLoading)
+{
+	<Alerta Tipo="warning">
+		Cargando tarjetas...
+	</Alerta>
+
+	@* Mientras se simula la carga, se muestra un mensaje simple de espera *@
+ 	<div class="spinner-container" role="status" aria-live="polite">
+ 		<div class="spinner-border" aria-hidden="true"></div>
+ 		<span class="visually-hidden">Cargando tarjeta...</span>
+ 	</div>
+}
+else
+{
+<h1>Listado de Tarjetas</h1>
+
+	<Alerta Tipo="success">
+		Las tarjetas se cargaron correctamente.
+	</Alerta>
+
+<div class="tarjetas-grid">
+    @* Recorre la lista y renderiza una tarjeta por cada elemento *@
+    @foreach (var tarjeta in tarjetas)
+    {
+        <article class="tarjeta" style="border: 2px solid @Color;">
+            <h3>@tarjeta.Titulo</h3>
+            <p>@tarjeta.Descripcion</p>
+        </article>
+    }
+</div>
+
+@code {
+    // Datos de ejemplo para mostrar cinco tarjetas.
+    private readonly List<TarjetaItem> tarjetas = new()
+    {
+        new() { Titulo = "HTML", Descripcion = "Maquetado WEB" },
+        new() { Titulo = "CSS", Descripcion = "Estilos para la WEB" },
+        new() { Titulo = "JavaScript", Descripcion = "Programación para la WEB" },
+        new() { Titulo = "Blazor", Descripcion = "Framework para desarrollo web con C#" },
+        new() { Titulo = "ASP.NET Core", Descripcion = "Framework para desarrollo de aplicaciones web" }
+    };
+
+    // Modelo simple para el contenido de cada tarjeta.
+    private sealed class TarjetaItem
+    {
+        public string Titulo { get; set; } = string.Empty;
+        public string Descripcion { get; set; } = string.Empty;
+    }
+}
+
+}
+
+@code {
+	// Controla si el componente sigue en su fase de carga inicial.
+	private bool isLoading = true;
+
+	// Título visible de la tarjeta.
+	[Parameter]
+	public string Titulo { get; set; } = string.Empty;
+
+	// Descripción visible de la tarjeta.
+	[Parameter]
+	public string Descripcion { get; set; } = string.Empty;
+
+    // Color configurable para el borde de las tarjetas.
+    [Parameter]
+    public string Color { get; set; } = "#2563eb";
+
+    private CancellationTokenSource? cts; // Fuente de cancelación para manejar tareas asíncronas si fuera necesario.
+
+	// Simula una carga asíncrona al inicializar el componente.
+	protected override async Task OnInitializedAsync()
+	{
+		await Task.Delay(1000);
+		isLoading = false;
+	}
+
+    public void Dispose()
+    {
+        Console.WriteLine("El componente Tarjetas fue destruido y Dispose() se ejecutó.");
+        cts?.Cancel();  
+        cts?.Dispose();
+        // Aquí podrías limpiar recursos si fuera necesario, aunque en este caso no hay ninguno.
+    }
+}
+

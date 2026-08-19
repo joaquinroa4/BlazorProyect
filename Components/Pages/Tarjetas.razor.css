@@ -1,0 +1,87 @@
+    .tarjeta {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .tarjeta:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .tarjeta-contenido {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tarjeta-titulo {
+        margin: 0 0 10px 0;
+        color: #333;
+        font-size: 1.25rem;
+    }
+
+    .tarjeta-descripcion {
+        margin: 0;
+        color: #666;
+        font-size: 0.95rem;
+    }
+    .tarjetas-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+    }
+    .tarjeta {
+        border: 1px solid #d9dee5;
+        border-radius: 10px;
+        padding: 16px;
+        background: #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+    .tarjeta h3 {
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+
+    .tarjeta p {
+        margin: 0;
+        color: #4b5563;
+    }
+
+	/* Spinner styles */
+	.spinner-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 120px;
+	}
+
+	.spinner-border {
+		width: 2.5rem;
+		height: 2.5rem;
+		border: 0.25em solid #0d6efd;
+		border-right-color: transparent;
+		border-radius: 50%;
+		animation: spinner-border 0.75s linear infinite;
+	}
+
+	@keyframes spinner-border {
+		to { transform: rotate(360deg); }
+	}
+
+	/* Utility to hide text visually but keep it for screen readers */
+	.visually-hidden {
+		position: absolute !important;
+		width: 1px !important;
+		height: 1px !important;
+		padding: 0 !important;
+		margin: -1px !important;
+		overflow: hidden !important;
+		clip: rect(0, 0, 0, 0) !important;
+		white-space: nowrap !important;
+		border: 0 !important;
+	}

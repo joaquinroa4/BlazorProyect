@@ -1,0 +1,18 @@
+<div class="alert @CssClass" role="alert">
+	@ChildContent
+</div>
+
+@code {
+	[Parameter]
+	public string Tipo { get; set; } = "warning"; //Parámetro que se llama y obtiene un dato, por defecto carga un "warning"
+
+	[Parameter]
+	public RenderFragment? ChildContent { get; set; }
+
+	private string CssClass => Tipo.ToLowerInvariant() switch
+	{
+		"success" => "alert-success",
+		"danger" => "alert-danger",
+		_ => "alert-warning"
+	};
+}
