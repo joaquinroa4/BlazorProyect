@@ -31,4 +31,7 @@ public class Tarea
 
     public ICollection<SesionEstudio> SesionesEstudio { get; set; }
         = new List<SesionEstudio>();
+    
+    public ICollection<TareaEtiqueta> TareasEtiquetas { get; set; }
+    = new List<TareaEtiqueta>();
 }
