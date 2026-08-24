@@ -28,3 +28,5 @@
 /home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/obj/Debug/net8.0/ProyectoBlazor.genruntimeconfig.cache
 /home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/obj/Debug/net8.0/ref/ProyectoBlazor.dll
 /home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/obj/Debug/net8.0/scopedcss/Components/Pages/Tarjetas.razor.rz.scp.css
+/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/obj/Debug/net8.0/ProyectoBlazor.sourcelink.json
+/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/obj/Debug/net8.0/scopedcss/Components/Pages/Registro.razor.rz.scp.css

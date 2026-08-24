@@ -206,6 +206,10 @@ main[b-oxjrgkcf56] {
         overflow-y: auto;
     }
 }
+/* _content/ProyectoBlazor/Components/Pages/Registro.razor.rz.scp.css */
+.campo-angosto[b-giq57dbg20] {
+    max-width: 150px;
+}
 /* _content/ProyectoBlazor/Components/Pages/Tarjetas.razor.rz.scp.css */
     .tarjeta[b-anxyqb31ws] {
         background-color: #f8f9fa;
