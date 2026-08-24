@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Register the UsuarioService for dependency injection
 builder.Services.AddScoped<UsuarioService>();
 
 var app = builder.Build();
