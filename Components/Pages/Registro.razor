@@ -1,28 +1,29 @@
 @using ProyectoBlazor.Models
 
+
 <h3>Formulario de Registro</h3>
 
 <div class="card p-3 w-50">
-    <EditForm Model="@usuario" OnValidSubmit="RegistrarUsuario" FormName="registroUsuario">
+    <EditForm Model="@registro" OnValidSubmit="RegistrarUsuario" FormName="registroUsuario">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div class="mb-3">
             <label for="nombre">Nombre</label>
-            <InputText id="nombre" class="form-control" @bind-Value="usuario.Nombre"  />
-            <ValidationMessage For="@(() => usuario.Nombre)" />
+            <InputText id="nombre" class="form-control" @bind-Value="registro.Nombre"  />
+            <ValidationMessage For="@(() => registro.Nombre)" />
         </div>
 
         <div class="mb-3">
             <label for="email">Email</label>
-            <InputText id="email" type="email" class="form-control" @bind-Value="usuario.Email" />
-            <ValidationMessage For="@(() => usuario.Email)" />
+            <InputText id="email" type="email" class="form-control" @bind-Value="registro.Email" />
+            <ValidationMessage For="@(() => registro.Email)" />
         </div>
 
         <div class="mb-3">
             <label for="password">Contraseña</label>
-            <InputText id="password" type="password" class="form-control " @bind-Value="usuario.Password" />
-            <ValidationMessage For="@(() => usuario.Password)" />
+            <InputText id="password" type="password" class="form-control " @bind-Value="registro.Password" />
+            <ValidationMessage For="@(() => registro.Password)" />
         </div>
 
         <button type="submit" class="btn btn-primary">Registrarse</button>
@@ -37,22 +38,21 @@
         Resumen en tiempo real
     </div>
     <div class="card-body">
-        <p><strong>Nombre:</strong> @usuario.Nombre</p>
-        <p><strong>Email:</strong> @usuario.Email</p>
-        <p><strong>Contraseña:</strong> @(string.IsNullOrEmpty(usuario.Password) ? "" : new string('*', usuario.Password.Length))</p>
+        <p><strong>Nombre:</strong> @registro.Nombre</p>
+        <p><strong>Email:</strong> @registro.Email</p>
+        <p><strong>Contraseña:</strong> @(string.IsNullOrEmpty(registro.Password) ? "" : new string('*', registro.Password.Length))</p>
     </div>
 </div>
 
 
 @code {
 
-    private Usuario usuario = new Usuario();
-
+    private RegistroModel registro = new RegistroModel();
     private string mensaje = string.Empty;
 
     private void RegistrarUsuario()
     {
-        mensaje = $"Usuario registrado: {usuario.Nombre}, {usuario.Email}";
+        mensaje = $"Usuario registrado: {registro.Nombre}, {registro.Email}";
     }
 
-
+}
