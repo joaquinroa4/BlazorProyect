@@ -21,6 +21,32 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // ==========================================
+        // CLAVES PRIMARIAS
+        // ==========================================
+
+        modelBuilder.Entity<Usuario>()
+            .HasKey(u => u.IdUsuario);
+
+        modelBuilder.Entity<Materia>()
+            .HasKey(m => m.IdMateria);
+
+        modelBuilder.Entity<Tarea>()
+            .HasKey(t => t.IdTarea);
+
+        modelBuilder.Entity<SesionEstudio>()
+            .HasKey(s => s.IdSesion);
+
+        modelBuilder.Entity<Etiqueta>()
+            .HasKey(e => e.IdEtiqueta);
+
+        // Clave primaria compuesta
+        modelBuilder.Entity<TareaEtiqueta>()
+            .HasKey(te => new
+            {
+                te.TareaId,
+                te.EtiquetaId
+            });
+        // ==========================================
         // USUARIO -> MATERIA
         // ==========================================
 
@@ -80,12 +106,6 @@ public class ApplicationDbContext : DbContext
         // RELACION MUCHOS A MUCHOS
         // ==========================================
 
-        modelBuilder.Entity<TareaEtiqueta>()
-            .HasKey(te => new
-            {
-                te.TareaId,
-                te.EtiquetaId
-            });
 
         modelBuilder.Entity<TareaEtiqueta>()
             .HasOne(te => te.Tarea)
