@@ -10,12 +10,13 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
     
 //EntityFramework Core configuration to use SQL Server with the connection string from appsettings.json
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register the UsuarioService for dependency injection
 builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<MateriaService>();
 
 var app = builder.Build();
 
