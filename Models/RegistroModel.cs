@@ -16,5 +16,5 @@ public class RegistroModel
     public string Password { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "La fecha de nacimiento es obligatoria")]
-    public DateOnly? FechaNacimiento { get; set; }
+    public DateOnly FechaNacimiento { get; set; }
 }
