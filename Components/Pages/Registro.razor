@@ -2,6 +2,7 @@
 @using ProyectoBlazor.Services
 
 @inject UsuarioService UsuarioService
+@inject UsuarioActualService UsuarioActualService
 
 <h3>Formulario de Registro</h3>
 
@@ -106,6 +107,7 @@
 
 @code {
 
+
     private RegistroModel registro = new RegistroModel();
 
     private string mensaje = string.Empty;
@@ -113,32 +115,25 @@
     private bool registrando = false;
     private async Task RegistrarUsuario()
     {
-        if (registrando)
-            return;
-
-        registrando = true;
-
-        try
-        {
-            bool registrado = await UsuarioService.RegistrarUsuarioAsync(
+        var usuarioRegistrado =
+            await UsuarioService.RegistrarUsuarioAsync(
                 registro.Nombre,
                 registro.Email,
                 registro.Password,
                 registro.FechaNacimiento);
 
-            if (registrado)
-            {
-                mensaje = "Usuario registrado correctamente.";
-                registro = new RegistroModel();
-            }
-            else
-            {
-                mensaje = "Ya existe un usuario registrado con ese email.";
-            }
-        }
-        finally
+        if (usuarioRegistrado != null)
         {
-            registrando = false;
+            UsuarioActualService.EstablecerUsuario(
+                usuarioRegistrado.IdUsuario);
+
+            mensaje = "Usuario registrado correctamente.";
+
+            registro = new RegistroModel();
+        }
+        else
+        {
+            mensaje = "Ya existe un usuario registrado con ese email.";
         }
     }
 }
