@@ -46,6 +46,10 @@ public class ApplicationDbContext : DbContext
                 te.TareaId,
                 te.EtiquetaId
             });
+
+        modelBuilder.Entity<Usuario>()
+        .HasIndex(u => u.Email)
+        .IsUnique();
         // ==========================================
         // USUARIO -> MATERIA
         // ==========================================
@@ -87,7 +91,7 @@ public class ApplicationDbContext : DbContext
             .HasOne(s => s.Usuario)
             .WithMany(u => u.SesionesEstudio)
             .HasForeignKey(s => s.UsuarioId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
 
         // ==========================================
