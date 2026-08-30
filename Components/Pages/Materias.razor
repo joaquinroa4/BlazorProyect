@@ -131,6 +131,12 @@
 
                                     <input class="form-control"
                                         @bind="nombreEdicion" />
+                                            @if (!string.IsNullOrEmpty(mensajeNombreEdicion))
+                                    {
+                                        <div class="text-danger small mt-1">
+                                            @mensajeNombreEdicion
+                                        </div>
+                                    }
 
                                 </div>
 
@@ -144,6 +150,12 @@
                                             rows="3"
                                             @bind="descripcionEdicion">
                                     </textarea>
+                                    @if (!string.IsNullOrEmpty(mensajeDescripcionEdicion))
+                                    {
+                                        <div class="text-danger small mt-1">
+                                            @mensajeDescripcionEdicion
+                                        </div>
+                                    }
 
                                 </div>
 
@@ -279,6 +291,11 @@
 
     private bool guardandoEdicion = false;
 
+    private string mensajeEdicion = string.Empty;
+
+    private string mensajeNombreEdicion = string.Empty;
+    private string mensajeDescripcionEdicion = string.Empty;
+
     // Eliminar
     private int? materiaAEliminar;
     private bool eliminando = false;
@@ -323,6 +340,10 @@
         {
             mensaje = "El nombre de la materia es obligatorio.";
             return;
+        } else if (string.IsNullOrWhiteSpace(descripcion))
+        {
+            mensaje = "La descripción es obligatoria.";
+            return;
         }
 
         guardando = true;
@@ -361,6 +382,7 @@
 
         nombreEdicion = materia.Nombre;
         descripcionEdicion = materia.Descripcion;
+        mensajeEdicion = string.Empty;
     }
 
 
@@ -370,6 +392,7 @@
 
         nombreEdicion = string.Empty;
         descripcionEdicion = string.Empty;
+        mensajeEdicion = string.Empty;
     }
 
 
@@ -380,10 +403,27 @@
 
         if (materiaEnEdicion == null)
             return;
+        
+            mensajeNombreEdicion = string.Empty;
+            mensajeDescripcionEdicion = string.Empty;
+
+
+        bool hayErrores = false;
 
         if (string.IsNullOrWhiteSpace(nombreEdicion))
-            return;
+        {
+            mensajeNombreEdicion = "El nombre es obligatorio.";
+            hayErrores = true;
+        }
 
+        if (string.IsNullOrWhiteSpace(descripcionEdicion))
+        {
+            mensajeDescripcionEdicion = "La descripción es obligatoria.";
+            hayErrores = true;
+        }
+
+        if (hayErrores)
+            return;
         guardandoEdicion = true;
 
         try
@@ -392,9 +432,7 @@
                 await MateriaService.ActualizarMateriaAsync(
                     materiaEnEdicion.Value,
                     nombreEdicion.Trim(),
-                    string.IsNullOrWhiteSpace(descripcionEdicion)
-                        ? null
-                        : descripcionEdicion.Trim(),
+                    descripcionEdicion!.Trim(),
                     usuarioId);
 
             if (actualizado)
