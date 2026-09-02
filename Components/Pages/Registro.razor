@@ -202,56 +202,26 @@
             }
             else
             {
-                <div class="table-responsive">
+                <RadzenDataGrid Data="@usuarios" TItem="Usuario" AllowSorting="true" AllowPaging="true" PageSize="10"
+                                AllowFiltering="true" FilterMode="FilterMode.Simple">
 
-                    <table class="table table-striped table-hover">
+                    <Columns>
 
-                        <thead>
+                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.IdUsuario)" Title="ID" />
 
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Email</th>
-                                <th>Fecha de nacimiento</th>
-                                <th>Fecha de registro</th>
-                            </tr>
+                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.Nombre)" Title="Nombre" />
 
-                        </thead>
+                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.Email)" Title="Email" />
 
-                        <tbody>
+                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.FechaNacimiento)"
+                                            Title="Fecha de nacimiento" FormatString="{0:dd/MM/yyyy}" />
 
-                            @foreach (var usuario in usuarios)
-                            {
-                                <tr>
+                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.FechaRegistro)"
+                                            Title="Fecha de registro" FormatString="{0:dd/MM/yyyy HH:mm}" />
 
-                                    <td>
-                                        @usuario.IdUsuario
-                                    </td>
+                    </Columns>
 
-                                    <td>
-                                        @usuario.Nombre
-                                    </td>
-
-                                    <td>
-                                        @usuario.Email
-                                    </td>
-
-                                    <td>
-                                        @usuario.FechaNacimiento
-                                    </td>
-
-                                    <td>
-                                        @usuario.FechaRegistro
-                                    </td>
-
-                                </tr>
-                            }
-
-                        </tbody>
-
-                    </table>
-
-                </div>
+                </RadzenDataGrid>
             }
 
         </div>
