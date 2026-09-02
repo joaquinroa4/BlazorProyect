@@ -6,25 +6,30 @@ namespace ProyectoBlazor.Services;
 
 public class UsuarioService
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
 
-    public UsuarioService(ApplicationDbContext context)
+    public UsuarioService(
+        IDbContextFactory<ApplicationDbContext> contextFactory)
     {
-        _context = context;
+        _contextFactory = contextFactory;
     }
 
-    public async Task<bool> RegistrarUsuarioAsync(
-        string nombre,
-        string email,
-        string password,
-        DateOnly fechaNacimiento)
+    public async Task<Usuario?> RegistrarUsuarioAsync(
+    string nombre,
+    string email,
+    string password,
+    DateOnly fechaNacimiento)
     {
-        // Comprobar si el email ya existe
-        bool existe = await _context.Usuarios
+        await using var context =
+            await _contextFactory.CreateDbContextAsync();
+
+        bool existe = await context.Usuarios
             .AnyAsync(u => u.Email == email);
 
         if (existe)
-            return false;
+        {
+            return null;
+        }
 
         var usuario = new Usuario
         {
@@ -35,10 +40,33 @@ public class UsuarioService
             FechaRegistro = DateTime.Now
         };
 
-        _context.Usuarios.Add(usuario);
+        context.Usuarios.Add(usuario);
 
-        await _context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
 
-        return true;
+            return usuario;
+        }
+        catch (DbUpdateException ex)
+        {
+            if (ex.InnerException?.Message.Contains("IX_Usuarios_Email") == true)
+            {
+                return null;
+            }
+
+            // Si fue otro error de base de datos,
+            // no lo ocultamos.
+            throw;
+        }
+    }
+    public async Task<List<Usuario>> ObtenerUsuariosAsync()
+    {
+        await using var context =
+            await _contextFactory.CreateDbContextAsync();
+
+        return await context.Usuarios
+            .OrderBy(u => u.IdUsuario)
+            .ToListAsync();
     }
 }
