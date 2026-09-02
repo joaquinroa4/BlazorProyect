@@ -13,7 +13,7 @@ public class MateriaService
     {
         _contextFactory = contextFactory;
     }
-    //Traigo materias del usuaroo en orden alfabético
+    //Traigo materias del usuario en orden alfabético
     public async Task<List<Materia>> ObtenerMateriasAsync(int usuarioId)
     {
         await using var context =
@@ -27,16 +27,29 @@ public class MateriaService
 //Creo una materia, la asigno al usuario y la guardo en SQL Server
     public async Task<bool> CrearMateriaAsync(
         string nombre,
-        string? descripcion,
+        string descripcion,
+        string color,
         int usuarioId)
     {
+        if (usuarioId <= 0)
+        {
+            return false;
+        }
         await using var context =
             await _contextFactory.CreateDbContextAsync();
+        bool usuarioExiste = await context.Usuarios
+        .AnyAsync(u => u.IdUsuario == usuarioId);
+
+        if (!usuarioExiste)
+        {
+            return false;
+        }
 
         var materia = new Materia
         {
             Nombre = nombre,
             Descripcion = descripcion,
+            Color = color,
             UsuarioId = usuarioId
         };
 
@@ -51,7 +64,8 @@ public class MateriaService
     public async Task<bool> ActualizarMateriaAsync(
     int idMateria,
     string nombre,
-    string? descripcion,
+    string descripcion,
+    string color,
     int usuarioId)
     {
         await using var context =
@@ -69,6 +83,7 @@ public class MateriaService
 
         materia.Nombre = nombre;
         materia.Descripcion = descripcion;
+        materia.Color = color;
 
         await context.SaveChangesAsync();
 
