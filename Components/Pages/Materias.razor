@@ -2,8 +2,10 @@
 
 @using ProyectoBlazor.Models
 @using ProyectoBlazor.Services
+@using ProyectoBlazor.Shared
 
 @inject MateriaService MateriaService
+@inject UsuarioActualService UsuarioActualService
 
 @rendermode InteractiveServer
 
@@ -12,18 +14,34 @@
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
+
         <div>
+
             <h2>Mis Materias</h2>
+
             <p class="text-muted">
                 Organizá tus materias y asociá tus tareas a cada una.
-            </p>
+            </p> <br>
+            <h3>
+    Usuario actual: @UsuarioActualService.UsuarioId </h3>
+
         </div>
+
     </div>
 
-    <!-- Crear materia -->
+
+    <!-- ============================ -->
+    <!-- CREAR MATERIA -->
+    <!-- ============================ -->
+
     <div class="card shadow-sm mb-4">
+
         <div class="card-header">
-            <h5 class="mb-0">Nueva materia</h5>
+
+            <h5 class="mb-0">
+                Nueva materia
+            </h5>
+
         </div>
 
         <div class="card-body">
@@ -31,26 +49,47 @@
             <div class="row">
 
                 <div class="col-md-5 mb-3">
+
                     <label class="form-label">
                         Nombre
                     </label>
 
                     <input class="form-control"
-                        @bind="nombre"
-                        placeholder="Ej: Programación" />
+                           @bind="nombre"
+                           placeholder="Ej: Programación" />
+
                 </div>
 
+
                 <div class="col-md-7 mb-3">
+
                     <label class="form-label">
                         Descripción
                     </label>
 
                     <input class="form-control"
-                        @bind="descripcion"
-                        placeholder="Descripción de la materia" />
+                           @bind="descripcion"
+                           placeholder="Descripción de la materia" />
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label for="color" class="form-label">
+                        Color
+                    </label>
+
+                    <input id="color"
+                           type="color"
+                           class="form-control form-control-color"
+                           @bind="color"
+                           title="Elegí un color" />
+
                 </div>
 
             </div>
+
 
             <button class="btn btn-primary"
                     @onclick="CrearMateria"
@@ -67,6 +106,7 @@
 
             </button>
 
+
             @if (!string.IsNullOrEmpty(mensaje))
             {
                 <div class="alert alert-info mt-3 mb-0">
@@ -75,26 +115,39 @@
             }
 
         </div>
+
     </div>
 
 
-    <!-- Listado de materias -->
+    <!-- ============================ -->
+    <!-- LISTADO -->
+    <!-- ============================ -->
+
     <div class="mb-3">
-        <h4>Mis materias</h4>
+
+        <h4>
+            Mis materias
+        </h4>
+
     </div>
+
 
     @if (cargando)
     {
         <div class="text-center mt-4">
+
             <div class="spinner-border" role="status">
+
                 <span class="visually-hidden">
                     Cargando...
                 </span>
+
             </div>
 
             <p class="text-muted mt-2">
                 Cargando materias...
             </p>
+
         </div>
     }
     else if (materias.Count == 0)
@@ -111,155 +164,10 @@
             {
                 <div class="col-md-6 col-lg-4 mb-4">
 
-                    <div class="card shadow-sm h-100">
-
-                        @if (materiaEnEdicion == materia.IdMateria)
-                        {
-                            <!-- MODO EDICIÓN -->
-
-                            <div class="card-body">
-
-                                <h5 class="card-title mb-3">
-                                    Editar materia
-                                </h5>
-
-                                <div class="mb-3">
-
-                                    <label class="form-label">
-                                        Nombre
-                                    </label>
-
-                                    <input class="form-control"
-                                        @bind="nombreEdicion" />
-                                            @if (!string.IsNullOrEmpty(mensajeNombreEdicion))
-                                    {
-                                        <div class="text-danger small mt-1">
-                                            @mensajeNombreEdicion
-                                        </div>
-                                    }
-
-                                </div>
-
-                                <div class="mb-3">
-
-                                    <label class="form-label">
-                                        Descripción
-                                    </label>
-
-                                    <textarea class="form-control"
-                                            rows="3"
-                                            @bind="descripcionEdicion">
-                                    </textarea>
-                                    @if (!string.IsNullOrEmpty(mensajeDescripcionEdicion))
-                                    {
-                                        <div class="text-danger small mt-1">
-                                            @mensajeDescripcionEdicion
-                                        </div>
-                                    }
-
-                                </div>
-
-                                <div class="d-flex gap-2">
-
-                                    <button class="btn btn-success"
-                                            @onclick="GuardarEdicion"
-                                            disabled="@guardandoEdicion">
-
-                                        @(guardandoEdicion
-                                            ? "Guardando..."
-                                            : "Guardar")
-
-                                    </button>
-
-                                    <button class="btn btn-secondary"
-                                            @onclick="CancelarEdicion"
-                                            disabled="@guardandoEdicion">
-
-                                        Cancelar
-
-                                    </button>
-
-                                </div>
-
-                            </div>
-                        }
-                        else
-                        {
-                            <!-- MODO VISUALIZACIÓN -->
-
-                            <div class="card-body d-flex flex-column">
-
-                                <h5 class="card-title">
-                                    @materia.Nombre
-                                </h5>
-
-                                @if (!string.IsNullOrWhiteSpace(materia.Descripcion))
-                                {
-                                    <p class="card-text text-muted">
-                                        @materia.Descripcion
-                                    </p>
-                                }
-                                else
-                                {
-                                    <p class="card-text text-muted">
-                                        Sin descripción.
-                                    </p>
-                                }
-
-                                <div class="mt-auto pt-3">
-
-                                    @if (materiaAEliminar == materia.IdMateria)
-                                    {
-                                        <div class="alert alert-warning py-3 mb-3">
-                                            <small>
-                                                ¿Seguro que querés eliminar esta materia?
-                                            </small>
-                                        </div>
-
-                                        <div class="d-flex gap-2">
-
-                                            <button class="btn btn-danger btn-sm" @onclick="() => EliminarMateria(materia.IdMateria)"
-                                                    disabled="@eliminando">
-
-                                                @(eliminando ? "Eliminando..." : "Sí, eliminar")
-
-                                            </button>
-
-                                            <button class="btn btn-secondary btn-sm" @onclick="CancelarEliminacion"
-                                                    disabled="@eliminando">
-
-                                                Cancelar
-
-                                            </button>
-
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="d-flex gap-2">
-
-                                            <button class="btn btn-outline-primary btn-sm" @onclick="() => IniciarEdicion(materia)">
-
-                                                Editar
-
-                                            </button>
-
-                                            <button class="btn btn-outline-danger btn-sm"
-                                                    @onclick="() => ConfirmarEliminacion(materia.IdMateria)">
-
-                                                Eliminar
-
-                                            </button>
-
-                                        </div>
-                                    }
-
-                                </div>
-
-                            </div>
-                        }
-
-                    </div>
+                    <MateriaCard
+                        Materia="materia"
+                        OnGuardarEdicion="GuardarEdicion"
+                        OnEliminar="EliminarMateria" />
 
                 </div>
             }
@@ -272,42 +180,53 @@
 
 @code {
 
+    // ==========================================
+    // LISTADO
+    // ==========================================
+
     private List<Materia> materias = new();
 
-    // Crear
+
+    // ==========================================
+    // CREAR
+    // ==========================================
+
     private string nombre = string.Empty;
-    private string? descripcion;
+
+    private string descripcion = string.Empty;
+
+    private string color = "#0d6efd";
 
     private string mensaje = string.Empty;
 
     private bool guardando = false;
+
+
+    // ==========================================
+    // CARGA
+    // ==========================================
+
     private bool cargando = true;
 
-    // Editar
-    private int? materiaEnEdicion;
 
-    private string nombreEdicion = string.Empty;
-    private string? descripcionEdicion;
-
-    private bool guardandoEdicion = false;
-
-    private string mensajeEdicion = string.Empty;
-
-    private string mensajeNombreEdicion = string.Empty;
-    private string mensajeDescripcionEdicion = string.Empty;
-
-    // Eliminar
-    private int? materiaAEliminar;
-    private bool eliminando = false;
-
-    // Temporalmente usamos un usuario existente.
-    // Luego será reemplazado por el usuario autenticado.
-    private int usuarioId = 4;
-
-
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await CargarMaterias();
+        if (firstRender)
+        {
+            bool usuarioRecuperado =
+                await UsuarioActualService.CargarUsuarioAsync();
+
+            if (usuarioRecuperado)
+            {
+                await CargarMaterias();
+            }
+            else
+            {
+                cargando = false;
+            }
+
+            StateHasChanged();
+        }
     }
 
 
@@ -315,10 +234,18 @@
     {
         cargando = true;
 
+        if (!UsuarioActualService.HayUsuarioSeleccionado())
+        {
+            materias = new List<Materia>();
+            cargando = false;
+            return;
+        }
+
         try
         {
-            materias = await MateriaService
-                .ObtenerMateriasAsync(usuarioId);
+            materias =
+                await MateriaService.ObtenerMateriasAsync(
+                    UsuarioActualService.UsuarioId);
         }
         finally
         {
@@ -327,20 +254,34 @@
     }
 
 
-    // ============================
-    // CREAR
-    // ============================
+    // ==========================================
+    // CREAR MATERIA
+    // ==========================================
 
     private async Task CrearMateria()
     {
         if (guardando)
             return;
 
+        if (!UsuarioActualService.HayUsuarioSeleccionado())
+        {
+            mensaje = "No hay un usuario activo.";
+            return;
+        }
+
+        if (UsuarioActualService.UsuarioId <= 0)
+        {
+            mensaje = "El usuario activo no es válido.";
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(nombre))
         {
             mensaje = "El nombre de la materia es obligatorio.";
             return;
-        } else if (string.IsNullOrWhiteSpace(descripcion))
+        }
+
+        if (string.IsNullOrWhiteSpace(descripcion))
         {
             mensaje = "La descripción es obligatoria.";
             return;
@@ -353,13 +294,13 @@
         {
             await MateriaService.CrearMateriaAsync(
                 nombre.Trim(),
-                string.IsNullOrWhiteSpace(descripcion)
-                    ? null
-                    : descripcion.Trim(),
-                usuarioId);
+                descripcion.Trim(),
+                color.Trim(),
+                UsuarioActualService.UsuarioId);
 
             nombre = string.Empty;
             descripcion = string.Empty;
+            color = "#0d6efd";
 
             mensaje = "Materia creada correctamente.";
 
@@ -372,121 +313,43 @@
     }
 
 
-    // ============================
-    // EDITAR
-    // ============================
+    // ==========================================
+    // GUARDAR EDICIÓN
+    // ==========================================
 
-    private void IniciarEdicion(Materia materia)
+    private async Task GuardarEdicion(Materia materia)
     {
-        materiaEnEdicion = materia.IdMateria;
-
-        nombreEdicion = materia.Nombre;
-        descripcionEdicion = materia.Descripcion;
-        mensajeEdicion = string.Empty;
-    }
-
-
-    private void CancelarEdicion()
-    {
-        materiaEnEdicion = null;
-
-        nombreEdicion = string.Empty;
-        descripcionEdicion = string.Empty;
-        mensajeEdicion = string.Empty;
-    }
-
-
-    private async Task GuardarEdicion()
-    {
-        if (guardandoEdicion)
+        if (!UsuarioActualService.HayUsuarioSeleccionado())
             return;
 
-        if (materiaEnEdicion == null)
-            return;
-        
-            mensajeNombreEdicion = string.Empty;
-            mensajeDescripcionEdicion = string.Empty;
+        bool actualizado =
+            await MateriaService.ActualizarMateriaAsync(
+                materia.IdMateria,
+                materia.Nombre,
+                materia.Descripcion,
+                materia.Color,
+                UsuarioActualService.UsuarioId);
 
-
-        bool hayErrores = false;
-
-        if (string.IsNullOrWhiteSpace(nombreEdicion))
+        if (actualizado)
         {
-            mensajeNombreEdicion = "El nombre es obligatorio.";
-            hayErrores = true;
-        }
-
-        if (string.IsNullOrWhiteSpace(descripcionEdicion))
-        {
-            mensajeDescripcionEdicion = "La descripción es obligatoria.";
-            hayErrores = true;
-        }
-
-        if (hayErrores)
-            return;
-        guardandoEdicion = true;
-
-        try
-        {
-            bool actualizado =
-                await MateriaService.ActualizarMateriaAsync(
-                    materiaEnEdicion.Value,
-                    nombreEdicion.Trim(),
-                    descripcionEdicion!.Trim(),
-                    usuarioId);
-
-            if (actualizado)
-            {
-                await CargarMaterias();
-
-                CancelarEdicion();
-            }
-        }
-        finally
-        {
-            guardandoEdicion = false;
+            await CargarMaterias();
         }
     }
-    // ============================
-// ELIMINAR
-// ============================
 
-    private void ConfirmarEliminacion(int idMateria)
+
+    // ==========================================
+    // ELIMINAR
+    // ==========================================
+
+    private async Task EliminarMateria(Materia materia)
     {
-        materiaAEliminar = idMateria;
+        await MateriaService.EliminarMateriaAsync(
+            materia.IdMateria,
+            UsuarioActualService.UsuarioId);
+
+        await CargarMaterias();
+
+        mensaje = "Materia eliminada correctamente.";
     }
 
-    private void CancelarEliminacion()
-    {
-        materiaAEliminar = null;
-    }
-
-    private async Task EliminarMateria(int idMateria)
-    {
-        if (eliminando)
-            return;
-
-        eliminando = true;
-
-        try
-        {
-            bool eliminado =
-                await MateriaService.EliminarMateriaAsync(
-                    idMateria,
-                    usuarioId);
-
-            if (eliminado)
-            {
-                materiaAEliminar = null;
-
-                await CargarMaterias();
-
-                mensaje = "Materia eliminada correctamente.";
-            }
-        }
-        finally
-        {
-            eliminando = false;
-        }
-    }
 }
