@@ -89,7 +89,6 @@ public class MateriaService
 
         return true;
     }
-    //Eliminar una materia, verificando que pertenezca al usuario
     // Elimina una materia verificando que pertenezca al usuario
     public async Task<bool> EliminarMateriaAsync(
         int idMateria,
