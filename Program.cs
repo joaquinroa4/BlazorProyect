@@ -3,12 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using ProyectoBlazor.Data;
 using ProyectoBlazor.Services;
 using Blazored.LocalStorage;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddRadzenComponents();
 
 builder.Services.AddBlazoredLocalStorage();
     
