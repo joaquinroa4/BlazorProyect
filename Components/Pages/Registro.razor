@@ -4,136 +4,342 @@
 @inject UsuarioService UsuarioService
 @inject UsuarioActualService UsuarioActualService
 
-<h3>Formulario de Registro</h3>
+<div class="container mt-4">
 
-<div class="card p-3 w-50">
+    <h3>Formulario de Registro de Alumnos</h3>
 
-    <EditForm Model="@registro"
-            OnValidSubmit="RegistrarUsuario"
-            FormName="registroUsuario">
+    <!-- ====================================================== -->
+    <!-- FORMULARIO + RESUMEN -->
+    <!-- ====================================================== -->
 
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+    <div class="row">
 
-        <div class="mb-3">
-            <label for="nombre">Nombre</label>
+        <!-- ========================== -->
+        <!-- FORMULARIO -->
+        <!-- ========================== -->
 
-            <InputText id="nombre"
-                    class="form-control"
-                    @bind-Value="registro.Nombre" />
+        <div class="col-md-6 mb-4">
 
-            <ValidationMessage For="@(() => registro.Nombre)" />
+            <div class="card shadow-sm h-100">
+
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        Registrar nuevo usuario
+                    </h5>
+                </div>
+
+                <div class="card-body">
+
+                    <EditForm Model="@registro"
+                              OnValidSubmit="RegistrarUsuario"
+                              FormName="registroUsuario">
+
+                        <DataAnnotationsValidator />
+
+                        <ValidationSummary />
+
+                        <div class="mb-3">
+
+                            <label for="nombre">
+                                Nombre
+                            </label>
+
+                            <InputText id="nombre"
+                                       class="form-control"
+                                       @bind-Value="registro.Nombre" />
+
+                            <ValidationMessage For="@(() => registro.Nombre)" />
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="email">
+                                Email
+                            </label>
+
+                            <InputText id="email"
+                                       type="email"
+                                       class="form-control"
+                                       @bind-Value="registro.Email" />
+
+                            <ValidationMessage For="@(() => registro.Email)" />
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="password">
+                                Contraseña
+                            </label>
+
+                            <InputText id="password"
+                                       type="password"
+                                       class="form-control"
+                                       @bind-Value="registro.Password" />
+
+                            <ValidationMessage For="@(() => registro.Password)" />
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="fechaNacimiento">
+                                Fecha de nacimiento
+                            </label>
+
+                            <InputDate id="fechaNacimiento"
+                                       class="form-control"
+                                       @bind-Value="registro.FechaNacimiento" />
+
+                            <ValidationMessage For="@(() => registro.FechaNacimiento)" />
+
+                        </div>
+
+
+                        <button type="submit"
+                                class="btn btn-primary"
+                                disabled="@registrando">
+
+                            @(registrando
+                                ? "Registrando..."
+                                : "Registrarse")
+
+                        </button>
+
+                    </EditForm>
+
+
+                    @if (!string.IsNullOrEmpty(mensaje))
+                    {
+                        <div class="alert alert-info mt-3 mb-0">
+                            @mensaje
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="mb-3">
-            <label for="email">Email</label>
 
-            <InputText id="email"
-                    type="email"
-                    class="form-control"
-                    @bind-Value="registro.Email" />
+        <!-- ========================== -->
+        <!-- RESUMEN EN TIEMPO REAL -->
+        <!-- ========================== -->
 
-            <ValidationMessage For="@(() => registro.Email)" />
+        <div class="col-md-6 mb-4">
+
+            <div class="card shadow-sm h-100">
+
+                <div class="card-header bg-info text-white">
+
+                    <h5 class="mb-0">
+                        Resumen en tiempo real
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <p>
+                        <strong>Nombre:</strong>
+                        @registro.Nombre
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        @registro.Email
+                    </p>
+
+                    <p>
+                        <strong>Fecha de nacimiento:</strong>
+                        @registro.FechaNacimiento
+                    </p>
+
+                    <p>
+                        <strong>Contraseña:</strong>
+
+                        @(string.IsNullOrEmpty(registro.Password)
+                            ? ""
+                            : new string('*', registro.Password.Length))
+
+                    </p>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="mb-3">
-            <label for="password">Contraseña</label>
+    </div>
 
-            <InputText id="password"
-                    type="password"
-                    class="form-control"
-                    @bind-Value="registro.Password" />
 
-            <ValidationMessage For="@(() => registro.Password)" />
+    <!-- ====================================================== -->
+    <!-- USUARIOS REGISTRADOS -->
+    <!-- ====================================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+                Usuarios registrados
+            </h5>
+
         </div>
 
-        <div class="mb-3">
-            <label for="fechaNacimiento">Fecha de nacimiento</label>
+        <div class="card-body">
 
-            <InputDate id="fechaNacimiento"
-                    class="form-control"
-                    @bind-Value="registro.FechaNacimiento" />
+            @if (usuarios.Count == 0)
+            {
+                <p class="text-muted mb-0">
+                    No hay usuarios registrados.
+                </p>
+            }
+            else
+            {
+                <div class="table-responsive">
 
-            <ValidationMessage For="@(() => registro.FechaNacimiento)" />
+                    <table class="table table-striped table-hover">
+
+                        <thead>
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Fecha de nacimiento</th>
+                                <th>Fecha de registro</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var usuario in usuarios)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @usuario.IdUsuario
+                                    </td>
+
+                                    <td>
+                                        @usuario.Nombre
+                                    </td>
+
+                                    <td>
+                                        @usuario.Email
+                                    </td>
+
+                                    <td>
+                                        @usuario.FechaNacimiento
+                                    </td>
+
+                                    <td>
+                                        @usuario.FechaRegistro
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
         </div>
 
-        <button type="submit" class="btn btn-primary" disabled="@registrando">
-
-            @(registrando ? "Registrando..." : "Registrarse")
-
-        </button>
-
-    </EditForm>
+    </div>
 
 </div>
 
-<p class="text-success">@mensaje</p>
-
-<!-- Resumen dinámico -->
-
-<div class="card mt-3 shadow-sm">
-
-    <div class="card-header bg-info text-white">
-        Resumen en tiempo real
-    </div>
-
-    <div class="card-body">
-
-        <p>
-            <strong>Nombre:</strong>
-            @registro.Nombre
-        </p>
-
-        <p>
-            <strong>Email:</strong>
-            @registro.Email
-        </p>
-
-        <p>
-            <strong>Fecha de nacimiento:</strong>
-            @registro.FechaNacimiento
-        </p>
-
-        <p>
-            <strong>Contraseña:</strong>
-            @(string.IsNullOrEmpty(registro.Password)
-                ? ""
-                : new string('*', registro.Password.Length))
-        </p>
-
-    </div>
-
-</div>
 
 @code {
 
+    // ==========================================================
+    // REGISTRO
+    // ==========================================================
 
     private RegistroModel registro = new RegistroModel();
 
     private string mensaje = string.Empty;
 
     private bool registrando = false;
+
+
+    // ==========================================================
+    // USUARIOS
+    // ==========================================================
+
+    private List<Usuario> usuarios = new();
+
+
+    // ==========================================================
+    // CARGA INICIAL
+    // ==========================================================
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarUsuarios();
+    }
+
+
+    private async Task CargarUsuarios()
+    {
+        usuarios = await UsuarioService.ObtenerUsuariosAsync();
+    }
+
+
+    // ==========================================================
+    // REGISTRAR USUARIO
+    // ==========================================================
+
     private async Task RegistrarUsuario()
     {
-        var usuarioRegistrado =
-            await UsuarioService.RegistrarUsuarioAsync(
-                registro.Nombre,
-                registro.Email,
-                registro.Password,
-                registro.FechaNacimiento);
+        if (registrando)
+            return;
 
-        if (usuarioRegistrado != null)
+        registrando = true;
+        mensaje = string.Empty;
+
+        try
         {
-            UsuarioActualService.EstablecerUsuario(
-                usuarioRegistrado.IdUsuario);
+            var usuarioRegistrado =
+                await UsuarioService.RegistrarUsuarioAsync(
+                    registro.Nombre,
+                    registro.Email,
+                    registro.Password,
+                    registro.FechaNacimiento);
 
-            mensaje = "Usuario registrado correctamente.";
+            if (usuarioRegistrado != null)
+            {
+                await UsuarioActualService.EstablecerUsuarioAsync(
+                    usuarioRegistrado.IdUsuario);
 
-            registro = new RegistroModel();
+                mensaje = "Usuario registrado correctamente.";
+
+                registro = new RegistroModel();
+
+                // Actualizamos la lista de usuarios
+                await CargarUsuarios();
+            }
+            else
+            {
+                mensaje =
+                    "Ya existe un usuario registrado con ese email.";
+            }
         }
-        else
+        finally
         {
-            mensaje = "Ya existe un usuario registrado con ese email.";
+            registrando = false;
         }
     }
+
 }
