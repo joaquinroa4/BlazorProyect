@@ -1,0 +1,424 @@
+@using ProyectoBlazor.Models
+
+
+<div class="card shadow-sm h-100">
+
+    @if (modoEdicion)
+    {
+        <!-- ============================ -->
+        <!-- MODO EDICIÓN -->
+        <!-- ============================ -->
+
+        <div class="card-body">
+
+            <h5 class="card-title mb-3">
+                Editar materia
+            </h5>
+
+
+            <!-- NOMBRE -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Nombre
+                </label>
+
+                <input class="form-control"
+                    @bind="nombreEdicion" />
+
+                @if (!string.IsNullOrEmpty(mensajeNombreEdicion))
+                {
+                    <div class="text-danger small mt-1">
+
+                        @mensajeNombreEdicion
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- DESCRIPCIÓN -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Descripción
+                </label>
+
+                <textarea class="form-control"
+                        rows="3"
+                        @bind="descripcionEdicion">
+                </textarea>
+
+                @if (!string.IsNullOrEmpty(mensajeDescripcionEdicion))
+                {
+                    <div class="text-danger small mt-1">
+
+                        @mensajeDescripcionEdicion
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- COLOR -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Color
+                </label>
+
+                <input type="color"
+                    class="form-control form-control-color"
+                    @bind="colorEdicion" />
+
+            </div>
+
+
+            <!-- BOTONES -->
+
+            <div class="d-flex gap-2">
+
+                <button class="btn btn-success"
+                        @onclick="GuardarEdicion"
+                        disabled="@guardandoEdicion">
+
+                    @(guardandoEdicion
+                        ? "Guardando..."
+                        : "Guardar")
+
+                </button>
+
+
+                <button class="btn btn-secondary"
+                        @onclick="CancelarEdicion"
+                        disabled="@guardandoEdicion">
+
+                    Cancelar
+
+                </button>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <!-- ============================ -->
+        <!-- MODO VISUALIZACIÓN -->
+        <!-- ============================ -->
+
+        <div class="card-body d-flex flex-column">
+
+            <!-- COLOR -->
+
+            <div style="
+                height: 8px;
+                background-color: @Materia.Color;
+                border-radius: 4px 4px 0 0;
+                margin-bottom: 15px;">
+            </div>
+
+
+            <!-- NOMBRE -->
+
+            <h5 class="card-title">
+
+                @Materia.Nombre
+
+            </h5>
+
+
+            <!-- DESCRIPCIÓN -->
+
+            @if (!string.IsNullOrWhiteSpace(Materia.Descripcion))
+            {
+                <p class="card-text text-muted">
+
+                    @Materia.Descripcion
+
+                </p>
+            }
+            else
+            {
+                <p class="card-text text-muted">
+
+                    Sin descripción.
+
+                </p>
+            }
+
+
+            <div class="mt-auto pt-3">
+
+                @if (confirmandoEliminacion)
+                {
+                    <!-- ============================ -->
+                    <!-- CONFIRMACIÓN -->
+                    <!-- ============================ -->
+
+                    <div class="alert alert-warning py-3 mb-3">
+
+                        <small>
+                            ¿Seguro que querés eliminar esta materia?
+                        </small>
+
+                    </div>
+
+
+                    <div class="d-flex gap-2">
+
+                        <button class="btn btn-danger btn-sm"
+                                @onclick="Eliminar"
+                                disabled="@eliminando">
+
+                            @(eliminando
+                                ? "Eliminando..."
+                                : "Sí, eliminar")
+
+                        </button>
+
+
+                        <button class="btn btn-secondary btn-sm"
+                                @onclick="CancelarEliminacion"
+                                disabled="@eliminando">
+
+                            Cancelar
+
+                        </button>
+
+                    </div>
+                }
+                else
+                {
+                    <!-- ============================ -->
+                    <!-- BOTONES -->
+                    <!-- ============================ -->
+
+                    <div class="d-flex gap-2">
+
+                        <button class="btn btn-outline-primary btn-sm"
+                                @onclick="IniciarEdicion">
+
+                            Editar
+
+                        </button>
+
+
+                        <button class="btn btn-outline-danger btn-sm"
+                                @onclick="ConfirmarEliminacion">
+
+                            Eliminar
+
+                        </button>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+
+</div>
+
+
+@code {
+
+    // ==========================================
+    // PARAMETRO
+    // ==========================================
+
+    [Parameter]
+    public Materia Materia { get; set; } = null!;
+
+
+    // ==========================================
+    // EVENTOS
+    // ==========================================
+
+    [Parameter]
+    public EventCallback<Materia> OnGuardarEdicion { get; set; }
+
+    [Parameter]
+    public EventCallback<Materia> OnEliminar { get; set; }
+
+
+    // ==========================================
+    // ESTADO
+    // ==========================================
+
+    private bool modoEdicion = false;
+
+    private bool confirmandoEliminacion = false;
+
+    private bool guardandoEdicion = false;
+
+    private bool eliminando = false;
+
+
+    // ==========================================
+    // DATOS DE EDICIÓN
+    // ==========================================
+
+    private string nombreEdicion = string.Empty;
+
+    private string descripcionEdicion = string.Empty;
+
+    private string colorEdicion = "#0d6efd";
+
+
+    // ==========================================
+    // VALIDACIONES
+    // ==========================================
+
+    private string mensajeNombreEdicion = string.Empty;
+
+    private string mensajeDescripcionEdicion = string.Empty;
+
+
+    // ==========================================
+    // INICIAR EDICIÓN
+    // ==========================================
+
+    private void IniciarEdicion()
+    {
+        nombreEdicion = Materia.Nombre;
+
+        descripcionEdicion =
+            Materia.Descripcion ?? string.Empty;
+
+        colorEdicion =
+            string.IsNullOrEmpty(Materia.Color)
+                ? "#0d6efd"
+                : Materia.Color;
+
+        mensajeNombreEdicion = string.Empty;
+
+        mensajeDescripcionEdicion = string.Empty;
+
+        modoEdicion = true;
+
+        confirmandoEliminacion = false;
+    }
+
+
+    // ==========================================
+    // GUARDAR
+    // ==========================================
+
+    private async Task GuardarEdicion()
+    {
+        mensajeNombreEdicion = string.Empty;
+
+        mensajeDescripcionEdicion = string.Empty;
+
+
+        // VALIDAR NOMBRE
+
+        if (string.IsNullOrWhiteSpace(nombreEdicion))
+        {
+            mensajeNombreEdicion =
+                "El nombre es obligatorio.";
+
+            return;
+        }
+
+
+        // VALIDAR DESCRIPCIÓN
+
+        if (string.IsNullOrWhiteSpace(descripcionEdicion))
+        {
+            mensajeDescripcionEdicion =
+                "La descripción es obligatoria.";
+
+            return;
+        }
+
+
+        guardandoEdicion = true;
+
+        try
+        {
+            Materia.Nombre =
+                nombreEdicion.Trim();
+
+            Materia.Descripcion =
+                descripcionEdicion.Trim();
+
+            Materia.Color =
+                colorEdicion;
+
+
+            await OnGuardarEdicion
+                .InvokeAsync(Materia);
+
+            modoEdicion = false;
+        }
+        finally
+        {
+            guardandoEdicion = false;
+        }
+    }
+
+
+    // ==========================================
+    // CANCELAR EDICIÓN
+    // ==========================================
+
+    private void CancelarEdicion()
+    {
+        modoEdicion = false;
+
+        mensajeNombreEdicion = string.Empty;
+
+        mensajeDescripcionEdicion = string.Empty;
+    }
+
+
+    // ==========================================
+    // CONFIRMAR ELIMINACIÓN
+    // ==========================================
+
+    private void ConfirmarEliminacion()
+    {
+        confirmandoEliminacion = true;
+    }
+
+
+    // ==========================================
+    // CANCELAR ELIMINACIÓN
+    // ==========================================
+
+    private void CancelarEliminacion()
+    {
+        confirmandoEliminacion = false;
+    }
+
+
+    // ==========================================
+    // ELIMINAR
+    // ==========================================
+
+    private async Task Eliminar()
+    {
+        if (eliminando)
+            return;
+
+        eliminando = true;
+
+        try
+        {
+            await OnEliminar.InvokeAsync(Materia);
+        }
+        finally
+        {
+            eliminando = false;
+        }
+    }
+
+}
