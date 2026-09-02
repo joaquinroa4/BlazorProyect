@@ -8,7 +8,7 @@ public class Materia
 
     public string Descripcion { get; set; } = string.Empty;
 
-    public string Color { get; set; } = string.Empty;
+    public string Color { get; set; } = "#0d6efd";
 
     public int UsuarioId { get; set; }
 
