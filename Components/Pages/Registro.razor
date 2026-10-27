@@ -6,7 +6,7 @@
 
 <div class="container mt-4">
 
-    <h3>Formulario de Registro de Alumnos</h3>
+    <h3>Formulario de Registro de Usuarios</h3>
 
     <!-- ====================================================== -->
     <!-- FORMULARIO + RESUMEN -->
@@ -31,12 +31,11 @@
                 <div class="card-body">
 
                     <EditForm Model="@registro"
-                              OnValidSubmit="RegistrarUsuario"
-                              FormName="registroUsuario">
+                            OnValidSubmit="RegistrarUsuario"
+                            FormName="registroUsuario">
 
                         <DataAnnotationsValidator />
 
-                        <ValidationSummary />
 
                         <div class="mb-3">
 
@@ -45,8 +44,8 @@
                             </label>
 
                             <InputText id="nombre"
-                                       class="form-control"
-                                       @bind-Value="registro.Nombre" />
+                                    class="form-control"
+                                    @bind-Value="registro.Nombre" />
 
                             <ValidationMessage For="@(() => registro.Nombre)" />
 
@@ -60,9 +59,9 @@
                             </label>
 
                             <InputText id="email"
-                                       type="email"
-                                       class="form-control"
-                                       @bind-Value="registro.Email" />
+                                    type="email"
+                                    class="form-control"
+                                    @bind-Value="registro.Email" />
 
                             <ValidationMessage For="@(() => registro.Email)" />
 
@@ -76,9 +75,9 @@
                             </label>
 
                             <InputText id="password"
-                                       type="password"
-                                       class="form-control"
-                                       @bind-Value="registro.Password" />
+                                    type="password"
+                                    class="form-control"
+                                    @bind-Value="registro.Password" />
 
                             <ValidationMessage For="@(() => registro.Password)" />
 
@@ -92,8 +91,8 @@
                             </label>
 
                             <InputDate id="fechaNacimiento"
-                                       class="form-control"
-                                       @bind-Value="registro.FechaNacimiento" />
+                                    class="form-control"
+                                    @bind-Value="registro.FechaNacimiento" />
 
                             <ValidationMessage For="@(() => registro.FechaNacimiento)" />
 
@@ -202,27 +201,138 @@
             }
             else
             {
-                <RadzenDataGrid Data="@usuarios" TItem="Usuario" AllowSorting="true" AllowPaging="true" PageSize="10"
-                                AllowFiltering="true" FilterMode="FilterMode.Simple">
+<div class="usuarios-grid-container">
 
-                    <Columns>
+    <!-- CABECERA -->
 
-                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.IdUsuario)" Title="ID" />
+                    <div class="usuarios-grid-header">
 
-                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.Nombre)" Title="Nombre" />
+                        <div>
 
-                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.Email)" Title="Email" />
+                            <h5 class="usuarios-grid-title">
+                                Usuarios actualmente registrados en StudyFlow
+                            </h5>
+                            <div class="usuarios-grid-stats">
 
-                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.FechaNacimiento)"
-                                            Title="Fecha de nacimiento" FormatString="{0:dd/MM/yyyy}" />
 
-                        <RadzenDataGridColumn TItem="Usuario" Property="@nameof(Usuario.FechaRegistro)"
-                                            Title="Fecha de registro" FormatString="{0:dd/MM/yyyy HH:mm}" />
 
-                    </Columns>
 
-                </RadzenDataGrid>
-            }
+                                <span class="usuarios-count">
+                                    @usuarios.Count
+                                </span>
+
+                                <span class="usuarios-count-label">
+                                    @(usuarios.Count == 1
+                                        ? "usuario"
+                                        : "usuarios")
+                                </span>
+                            </div>
+                        </div>
+
+
+
+    </div>
+
+
+    <!-- TOOLBAR -->
+
+    <div class="usuarios-grid-toolbar">
+
+        <div class="usuarios-search">
+
+            <RadzenIcon Icon="search" />
+
+            <input type="text"
+                class="form-control"
+                placeholder="Buscar por nombre o email..."
+                @bind="textoBusqueda"
+                @bind:event="oninput" />
+
+        </div>
+
+
+        <div class="usuarios-toolbar-actions">
+
+            <button type="button"
+                    class="btn btn-outline-primary"
+                    @onclick="AlternarFiltros">
+
+                <RadzenIcon Icon="filter_alt" />
+
+                @(mostrarFiltros
+                    ? "Ocultar filtros"
+                    : "Mostrar filtros")
+
+            </button>
+
+
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    @onclick="LimpiarBusqueda">
+
+                <RadzenIcon Icon="clear" />
+
+                Limpiar
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- DATAGRID -->
+
+    <RadzenDataGrid @ref="usuariosGrid"
+                    Data="@usuariosFiltrados"
+                    TItem="Usuario"
+                    AllowSorting="true"
+                    AllowPaging="true"
+                    PageSize="10"
+                    PageSizeOptions="@(new int[] { 5, 10, 20, 50 })"
+                    AllowFiltering="@mostrarFiltros"
+                    FilterMode="FilterMode.Simple"
+                    AllowAlternatingRows="true"
+                    AllowColumnResize="true"
+                    GridLines="DataGridGridLines.Horizontal"
+                    ShowPagingSummary="true"
+                    PagingSummaryFormat="Mostrando {0} a {1} de {2} usuarios">
+
+        <Columns>
+
+            <RadzenDataGridColumn TItem="Usuario"
+                                Property="@nameof(Usuario.IdUsuario)"
+                                Title="ID"
+                                Width="80px" />
+
+            <RadzenDataGridColumn TItem="Usuario"
+                                Property="@nameof(Usuario.Nombre)"
+                                Title="Nombre"
+                                Width="200px" />
+
+            <RadzenDataGridColumn TItem="Usuario"
+                                Property="@nameof(Usuario.Email)"
+                                Title="Email"
+                                Width="280px" />
+
+            <RadzenDataGridColumn TItem="Usuario"
+                                Property="@nameof(Usuario.FechaNacimiento)"
+                                Title="Fecha de nacimiento"
+                                FormatString="{0:dd/MM/yyyy}"
+                                Width="180px" />
+
+            <RadzenDataGridColumn TItem="Usuario"
+                                Property="@nameof(Usuario.FechaRegistro)"
+                                Title="Fecha de registro"
+                                FormatString="{0:dd/MM/yyyy HH:mm}"
+                                Width="200px" />
+
+        </Columns>
+
+    </RadzenDataGrid>
+
+            </div>            
+            } <!-- Fin Else -->
 
         </div>
 
@@ -251,6 +361,49 @@
     private List<Usuario> usuarios = new();
 
 
+    // ==========================================================
+    // FILTRADO DE USUARIOS
+    // ==========================================================
+
+    private string textoBusqueda = string.Empty;
+
+    private IEnumerable<Usuario> usuariosFiltrados =>
+        string.IsNullOrWhiteSpace(textoBusqueda)
+            ? usuarios
+            : usuarios.Where(u =>
+                u.Nombre.Contains(
+                    textoBusqueda,
+                    StringComparison.OrdinalIgnoreCase)
+                ||
+                u.Email.Contains(
+                    textoBusqueda,
+                    StringComparison.OrdinalIgnoreCase));
+
+    private async Task LimpiarBusqueda()
+    {
+        textoBusqueda = string.Empty;
+
+        if (usuariosGrid != null)
+        {
+            foreach (var columna in usuariosGrid.ColumnsCollection)
+            {
+                await usuariosGrid.ClearFilter(
+                    columna,
+                    closePopup: true,
+                    shouldReload: false);
+            }
+
+            await usuariosGrid.Reload();
+        }
+    }
+
+    private bool mostrarFiltros = false;
+
+    private void AlternarFiltros()
+    {
+        mostrarFiltros = !mostrarFiltros;
+    }
+    private RadzenDataGrid<Usuario>? usuariosGrid;
     // ==========================================================
     // CARGA INICIAL
     // ==========================================================
