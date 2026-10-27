@@ -24,6 +24,7 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<MateriaService>();
 builder.Services.AddScoped<UsuarioActualService>();
+builder.Services.AddScoped<TareaService>();
 
 
 
