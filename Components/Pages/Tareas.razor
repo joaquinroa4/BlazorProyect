@@ -1,0 +1,503 @@
+@page "/tareas"
+
+@using ProyectoBlazor.Models
+@using ProyectoBlazor.Services
+@using ProyectoBlazor.Shared
+
+@inject TareaService TareaService
+@inject MateriaService MateriaService
+@inject UsuarioActualService UsuarioActualService
+
+@rendermode InteractiveServer
+
+<PageTitle>Tareas</PageTitle>
+
+<div class="container mt-4">
+
+    <h3 class="mb-4">
+        Tareas
+    </h3>
+
+    <div class="row">
+
+        <!-- FORMULARIO -->
+
+        <div class="col-md-5 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+
+                    <h5 class="mb-0">
+                        @(editandoTarea ? "Editar tarea" : "Nueva tarea")
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <EditForm Model="@tareaNueva"
+                            OnValidSubmit="GuardarTarea">
+
+                        <DataAnnotationsValidator />
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Título
+                            </label>
+
+                            <InputText class="form-control"
+                                    @bind-Value="tareaNueva.Titulo" />
+
+                            <ValidationMessage
+                                For="@(() => tareaNueva.Titulo)" />
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Descripción
+                            </label>
+
+                            <InputTextArea class="form-control"
+                                        rows="4"
+                                        @bind-Value="tareaNueva.Descripcion" />
+
+                            <ValidationMessage
+                                For="@(() => tareaNueva.Descripcion)" />
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Materia
+                            </label>
+
+                            <InputSelect class="form-select"    
+                                        @bind-Value="tareaNueva.MateriaId">
+
+                                <option value="0">
+                                    Seleccioná una materia
+                                </option>
+
+                                @foreach (var materia in materias)
+                                {
+                                    <option value="@materia.IdMateria">
+                                        @materia.Nombre
+                                    </option>
+                                }
+
+                            </InputSelect>
+
+                            <ValidationMessage
+                                For="@(() => tareaNueva.MateriaId)" />
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Fecha de entrega
+                            </label>
+
+                            <InputDate class="form-control"
+                                    @bind-Value="tareaNueva.FechaEntrega" />
+                                    <ValidationMessage For="@(() => tareaNueva.FechaEntrega)" />
+
+                            <small class="text-muted">
+                                Opcional
+                            </small>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Estado
+                            </label>
+
+                            <InputSelect class="form-select"
+                                        @bind-Value="tareaNueva.Estado">
+
+                                @foreach (var estado in Enum.GetValues<EstadoTarea>())
+                                {
+                                    <option value="@estado">
+                                        @ObtenerNombreEstado(estado)
+                                    </option>
+                                }
+
+                            </InputSelect>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Prioridad
+                            </label>
+
+                            <InputSelect class="form-select"
+                                        @bind-Value="tareaNueva.Prioridad">
+
+                                @foreach (var prioridad in Enum.GetValues<PrioridadTarea>())
+                                {
+                                    <option value="@prioridad">
+                                        @ObtenerNombrePrioridad(prioridad)
+                                    </option>
+                                }
+
+                            </InputSelect>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Dificultad
+                            </label>
+
+                            <InputSelect class="form-select"
+                                        @bind-Value="tareaNueva.Dificultad">
+
+                                @foreach (var dificultad in Enum.GetValues<DificultadTarea>())
+                                {
+                                    <option value="@dificultad">
+                                        @ObtenerNombreDificultad(dificultad)
+                                    </option>
+
+                                }
+
+                            </InputSelect>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Tiempo estimado
+                            </label>
+
+                            <div class="input-group">
+
+                                <InputNumber class="form-control"
+                                            @bind-Value="tareaNueva.TiempoEstimadoMinutos" />
+
+                                <span class="input-group-text">
+                                    minutos
+                                </span>
+
+                            </div>
+
+                            <ValidationMessage
+                                For="@(() => tareaNueva.TiempoEstimadoMinutos)" />
+
+                            <small class="text-muted">
+                                Opcional
+                            </small>
+
+                        </div>
+
+
+                        <button type="submit"
+                                class="btn btn-primary"
+                                disabled="@creandoTarea">
+
+                            @(creandoTarea
+                                ? (editandoTarea ? "Guardando..." : "Creando...")
+                                : (editandoTarea ? "Guardar cambios" : "Crear tarea"))
+
+                        </button>
+
+                        @if (editandoTarea)
+                        {
+                            <button type="button"
+                                    class="btn btn-secondary ms-2"
+                                    @onclick="CancelarEdicion"
+                                    disabled="@creandoTarea">
+                                Cancelar
+                            </button>
+                        }
+
+                    </EditForm>
+
+
+                    @if (!string.IsNullOrEmpty(mensaje))
+                    {
+                        <div class="alert alert-info mt-3 mb-0">
+                            @mensaje
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LISTA -->
+
+        <div class="col-md-7 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header">
+
+                    <h5 class="mb-0">
+                        Mis tareas
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+                    @if (tareas.Count == 0)
+                    {
+                        <p class="text-muted mb-0">
+                            No hay tareas registradas.
+                        </p>
+                    }
+                    else
+                    {
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+
+                            @foreach (var tarea in tareas)
+                            {
+                                <div class="col">
+                                    <TareaCard Tarea="tarea" 
+                                            OnEditar="PrepararEdicion"
+                                            OnEliminar="SolicitarEliminacion"/>
+                                </div>
+                            }
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@code {
+
+    private TareaModel tareaNueva = new();
+
+    private List<Materia> materias = new();
+
+    private List<ProyectoBlazor.Models.Tarea> tareas = new();
+
+    private bool creandoTarea = false;
+    private bool editandoTarea = false;
+    private int tareaEditadaId;
+
+    private string mensaje = string.Empty;
+
+    protected override Task OnInitializedAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+
+    protected override async Task OnAfterRenderAsync(
+        bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        bool usuarioCargado =
+            await UsuarioActualService.CargarUsuarioAsync();
+
+        if (!usuarioCargado)
+            return;
+
+        await CargarMaterias();
+
+        await CargarTareas();
+
+        StateHasChanged();
+    }
+
+
+    private async Task CargarMaterias()
+    {
+        materias =
+            await MateriaService.ObtenerMateriasAsync(
+                UsuarioActualService.UsuarioId);
+    }
+
+
+    private async Task CargarTareas()
+    {
+        tareas =
+            await TareaService.ObtenerTareasAsync(
+                UsuarioActualService.UsuarioId);
+    }
+
+
+    private async Task GuardarTarea()
+    {
+        if (creandoTarea)
+            return;
+
+        creandoTarea = true;
+        mensaje = string.Empty;
+
+        try
+        {
+            bool guardada;
+            if (editandoTarea)
+            {
+                guardada =
+                    await TareaService.ActualizarTareaAsync(
+                        tareaEditadaId,
+                        tareaNueva.Titulo.Trim(),
+                        tareaNueva.Descripcion.Trim(),
+                        tareaNueva.FechaEntrega,
+                        tareaNueva.Estado,
+                        tareaNueva.Prioridad,
+                        tareaNueva.Dificultad,
+                        tareaNueva.TiempoEstimadoMinutos,
+                        tareaNueva.MateriaId,
+                        UsuarioActualService.UsuarioId);
+            }
+            else
+            {
+                guardada =
+                    await TareaService.CrearTareaAsync(
+                        tareaNueva.Titulo.Trim(),
+                        tareaNueva.Descripcion.Trim(),
+                        tareaNueva.FechaEntrega,
+                        tareaNueva.Estado,
+                        tareaNueva.Prioridad,
+                        tareaNueva.Dificultad,
+                        tareaNueva.TiempoEstimadoMinutos,
+                        tareaNueva.MateriaId,
+                        UsuarioActualService.UsuarioId);
+            }
+
+            if (!guardada)
+            {
+                mensaje = editandoTarea
+                    ? "No se pudo actualizar la tarea."
+                    : "No se pudo crear la tarea. Verificá la materia seleccionada.";
+                return;
+            }
+
+            mensaje = editandoTarea
+                ? "Tarea actualizada correctamente."
+                : "Tarea creada correctamente.";
+
+            tareaNueva = new TareaModel();
+            editandoTarea = false;
+            tareaEditadaId = 0;
+            await CargarTareas();
+        }
+        finally
+        {
+            creandoTarea = false;
+        }
+    }
+
+
+    private string ObtenerNombreEstado(
+        EstadoTarea estado)
+    {
+        return estado switch
+        {
+            EstadoTarea.Pendiente => "Pendiente",
+            EstadoTarea.EnProgreso => "En progreso",
+            EstadoTarea.Completada => "Completada",
+            _ => estado.ToString()
+        };
+    }
+
+
+    private string ObtenerNombrePrioridad(
+        PrioridadTarea prioridad)
+    {
+        return prioridad switch
+        {
+            PrioridadTarea.Baja => "Baja",
+            PrioridadTarea.Media => "Media",
+            PrioridadTarea.Alta => "Alta",
+            PrioridadTarea.Critica => "Crítica",
+            _ => prioridad.ToString()
+        };
+    }
+
+
+    private string ObtenerNombreDificultad(
+        DificultadTarea dificultad)
+    {
+        return dificultad switch
+        {
+            DificultadTarea.Facil => "Fácil",
+            DificultadTarea.Media => "Media",
+            DificultadTarea.Dificil => "Difícil",
+            _ => dificultad.ToString()
+        };
+    }
+
+    private void PrepararEdicion(Tarea tarea)
+    {
+        tareaEditadaId = tarea.IdTarea;
+        tareaNueva = new TareaModel
+        {
+            Titulo = tarea.Titulo,
+            Descripcion = tarea.Descripcion,
+            FechaEntrega = tarea.FechaEntrega,
+            Estado = tarea.Estado,
+            Prioridad = tarea.Prioridad,
+            Dificultad = tarea.Dificultad,
+            TiempoEstimadoMinutos = tarea.TiempoEstimadoMinutos,
+            MateriaId = tarea.MateriaId
+        };
+
+        editandoTarea = true;
+        mensaje = string.Empty;
+    }
+
+    private void CancelarEdicion()
+    {
+        tareaNueva = new TareaModel();
+        editandoTarea = false;
+        tareaEditadaId = 0;
+        mensaje = string.Empty;
+    }
+
+    private async Task SolicitarEliminacion(Tarea tarea)
+    {
+        mensaje = string.Empty;
+
+        bool eliminada =
+            await TareaService.EliminarTareaAsync(
+                tarea.IdTarea,
+                UsuarioActualService.UsuarioId);
+
+        if (eliminada)
+        {
+            mensaje = "Tarea eliminada correctamente.";
+            await CargarTareas();
+        }
+        else
+        {
+            mensaje = "No se pudo eliminar la tarea.";
+        }
+    }
+
+}
