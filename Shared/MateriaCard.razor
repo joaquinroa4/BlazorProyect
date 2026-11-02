@@ -1,8 +1,7 @@
 @using ProyectoBlazor.Models
-
+@using Microsoft.AspNetCore.Components.Web
 
 <div class="card shadow-sm h-100">
-
     @if (modoEdicion)
     {
         <!-- ============================ -->
@@ -201,7 +200,7 @@
 
                     <div class="d-flex gap-2">
 
-                        <button class="btn btn-outline-primary btn-sm"
+                        <button type="button" class="btn btn-outline-primary btn-sm"
                                 @onclick="IniciarEdicion">
 
                             Editar
@@ -420,5 +419,4 @@
             eliminando = false;
         }
     }
-
 }
