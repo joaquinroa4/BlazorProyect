@@ -160,6 +160,8 @@
     {
         <div class="row">
 
+                @* <MateriaCard Materia="materia" OnGuardarEdicion="GuardarEdicion" OnEliminar="EliminarMateria" /> *@
+
             @foreach (var materia in materias)
             {
                 <div class="col-md-6 col-lg-4 mb-4">
@@ -320,7 +322,10 @@
     private async Task GuardarEdicion(Materia materia)
     {
         if (!UsuarioActualService.HayUsuarioSeleccionado())
+        {
+            mensaje = "No hay un usuario activo.";
             return;
+        }
 
         bool actualizado =
             await MateriaService.ActualizarMateriaAsync(
@@ -332,7 +337,12 @@
 
         if (actualizado)
         {
+            mensaje = "Materia actualizada correctamente.";
             await CargarMaterias();
+        }
+        else
+        {
+            mensaje = "No se pudo actualizar la materia.";
         }
     }
 
@@ -343,13 +353,28 @@
 
     private async Task EliminarMateria(Materia materia)
     {
-        await MateriaService.EliminarMateriaAsync(
+        if (!UsuarioActualService.HayUsuarioSeleccionado())
+        {
+            mensaje = "No hay un usuario activo.";
+            return;
+        }
+
+        bool eliminada = await MateriaService.EliminarMateriaAsync(
             materia.IdMateria,
             UsuarioActualService.UsuarioId);
 
-        await CargarMaterias();
-
-        mensaje = "Materia eliminada correctamente.";
+        if (eliminada)
+        {
+            await CargarMaterias();
+            mensaje = "Materia eliminada correctamente.";
+        }
+        else
+        {
+            mensaje = "No se pudo eliminar la materia.";
+        }
     }
-
+    private void ProbarClicMateria()
+    {
+        mensaje = "El clic desde Materias funciona.";
+    }
 }
