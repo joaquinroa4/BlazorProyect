@@ -66,7 +66,101 @@ public class UsuarioService
             await _contextFactory.CreateDbContextAsync();
 
         return await context.Usuarios
-            .OrderBy(u => u.IdUsuario)
+            .OrderBy(u => u.Id)
             .ToListAsync();
+    }
+
+    public async Task<Usuario?> ObtenerUsuarioPorIdAsync(int idUsuario)
+    {
+        await using var context =
+            await _contextFactory.CreateDbContextAsync();
+
+        return await context.Usuarios
+            .FirstOrDefaultAsync(u => u.Id == idUsuario);
+    }
+
+    public async Task<bool> ActualizarUsuarioAsync(
+    int idUsuario,
+    string nombre,
+    string email,
+    DateOnly fechaNacimiento)
+    {
+        await using var context =
+            await _contextFactory.CreateDbContextAsync();
+
+        // Buscar el usuario
+        var usuario = await context.Usuarios
+            .FirstOrDefaultAsync(u => u.Id == idUsuario);
+
+        if (usuario == null)
+        {
+            return false;
+        }
+
+        // Normalizar los datos
+        nombre = nombre.Trim();
+        email = email.Trim();
+
+        // Comprobar que el email no pertenezca a otro usuario
+        bool emailExiste = await context.Usuarios
+            .AnyAsync(u =>
+                u.Email == email &&
+                u.Id != idUsuario);
+
+        if (emailExiste)
+        {
+            return false;
+        }
+
+        // Actualizar los datos personales
+        usuario.Nombre = nombre;
+        usuario.Email = email;
+        usuario.FechaNacimiento = fechaNacimiento;
+
+        await context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> EliminarUsuarioAsync(int idUsuario)
+    {
+        await using var context =
+            await _contextFactory.CreateDbContextAsync();
+
+        var usuario = await context.Usuarios
+            .FirstOrDefaultAsync(u => u.Id == idUsuario);
+
+        if (usuario == null)
+        {
+            return false;
+        }
+
+        // Usuario -> SesionEstudio está en Restrict:
+        // hay que borrar las sesiones primero.
+        var sesiones = await context.SesionesEstudio
+            .Where(s => s.UsuarioId == idUsuario)
+            .ToListAsync();
+
+        context.SesionesEstudio.RemoveRange(sesiones);
+
+        // Tarea -> Materia también está en Restrict:
+        // se borran tareas antes que materias.
+        var tareas = await context.Tareas
+            .Where(t => t.UsuarioId == idUsuario)
+            .ToListAsync();
+
+        context.Tareas.RemoveRange(tareas);
+
+        var materias = await context.Materias
+            .Where(m => m.UsuarioId == idUsuario)
+            .ToListAsync();
+
+        context.Materias.RemoveRange(materias);
+
+        context.Usuarios.Remove(usuario);
+
+        await context.SaveChangesAsync();
+
+        return true;
     }
 }
