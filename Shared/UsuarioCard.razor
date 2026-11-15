@@ -1,0 +1,509 @@
+@using ProyectoBlazor.Models
+@using Microsoft.AspNetCore.Components.Web
+
+<div class="card shadow-sm h-100">
+
+    @if (modoEdicion)
+    {
+        <!-- ============================ -->
+        <!-- MODO EDICIÓN -->
+        <!-- ============================ -->
+
+        <div class="card-body">
+
+            <h5 class="card-title mb-3">
+                Editar usuario
+            </h5>
+
+
+            <!-- NOMBRE -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Nombre
+                </label>
+
+                <input class="form-control"
+                       @bind="nombreEdicion" />
+
+                @if (!string.IsNullOrEmpty(mensajeNombreEdicion))
+                {
+                    <div class="text-danger small mt-1">
+
+                        @mensajeNombreEdicion
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Email
+                </label>
+
+                <input type="email"
+                       class="form-control"
+                       @bind="emailEdicion" />
+
+                @if (!string.IsNullOrEmpty(mensajeEmailEdicion))
+                {
+                    <div class="text-danger small mt-1">
+
+                        @mensajeEmailEdicion
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- FECHA DE NACIMIENTO -->
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Fecha de nacimiento
+                </label>
+
+                <input type="date"
+                       class="form-control"
+                       @bind="fechaNacimientoEdicion" />
+
+                @if (!string.IsNullOrEmpty(mensajeFechaNacimientoEdicion))
+                {
+                    <div class="text-danger small mt-1">
+
+                        @mensajeFechaNacimientoEdicion
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- BOTONES -->
+
+            <div class="d-flex gap-2">
+
+                <button class="btn btn-success"
+                        @onclick="GuardarEdicion"
+                        disabled="@guardandoEdicion">
+
+                    @(guardandoEdicion
+                        ? "Guardando..."
+                        : "Guardar")
+
+                </button>
+
+
+                <button class="btn btn-secondary"
+                        @onclick="CancelarEdicion"
+                        disabled="@guardandoEdicion">
+
+                    Cancelar
+
+                </button>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <!-- ============================ -->
+        <!-- MODO VISUALIZACIÓN -->
+        <!-- ============================ -->
+
+        <div class="card-body d-flex flex-column">
+
+            <!-- FRANJA -->
+
+            <div style="
+                height: 8px;
+                background-color: #0d6efd;
+                border-radius: 4px 4px 0 0;
+                margin-bottom: 15px;">
+            </div>
+
+
+            <!-- NOMBRE -->
+
+            <h5 class="card-title">
+
+                @Usuario.Nombre
+
+            </h5>
+
+
+            <!-- EMAIL -->
+
+            <p class="card-text text-muted mb-2">
+
+                @Usuario.Email
+
+            </p>
+
+
+            <!-- DATOS -->
+
+            <div class="mt-2">
+
+                <p class="mb-2">
+
+                    <strong>Fecha de nacimiento:</strong>
+
+                    @Usuario.FechaNacimiento.ToString("dd/MM/yyyy")
+
+                </p>
+
+                <p class="mb-0">
+
+                    <strong>Fecha de registro:</strong>
+
+                    @Usuario.FechaRegistro.ToString("dd/MM/yyyy HH:mm")
+
+                </p>
+
+            </div>
+
+
+            <div class="mt-auto pt-3">
+
+                @if (confirmandoEliminacion)
+                {
+                    <!-- ============================ -->
+                    <!-- CONFIRMACIÓN -->
+                    <!-- ============================ -->
+
+                    <div class="alert alert-warning py-3 mb-3">
+
+                        <small>
+                            ¿Seguro que querés eliminar este usuario?
+                        </small>
+
+                    </div>
+
+
+                    <div class="d-flex gap-2">
+
+                        <button class="btn btn-danger btn-sm"
+                                @onclick="Eliminar"
+                                disabled="@eliminando">
+
+                            @(eliminando
+                                ? "Eliminando..."
+                                : "Sí, eliminar")
+
+                        </button>
+
+
+                        <button class="btn btn-secondary btn-sm"
+                                @onclick="CancelarEliminacion"
+                                disabled="@eliminando">
+
+                            Cancelar
+
+                        </button>
+
+                    </div>
+                }
+                else
+                {
+                    <!-- ============================ -->
+                    <!-- BOTONES -->
+                    <!-- ============================ -->
+
+                    <div class="d-flex gap-2">
+
+                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                @onclick="IniciarEdicion">
+
+                            Editar
+
+                        </button>
+
+
+                        <button class="btn btn-outline-danger btn-sm"
+                                @onclick="ConfirmarEliminacion">
+
+                            Eliminar
+
+                        </button>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+    }
+
+</div>
+
+
+@code {
+
+    // ==========================================
+    // PARAMETRO
+    // ==========================================
+
+    [Parameter]
+    public Usuario Usuario { get; set; } = null!;
+
+
+    // ==========================================
+    // EVENTOS
+    // ==========================================
+
+    [Parameter]
+    public EventCallback<Usuario> OnGuardarEdicion { get; set; }
+
+    [Parameter]
+    public EventCallback<Usuario> OnEliminar { get; set; }
+
+
+    // ==========================================
+    // ESTADO
+    // ==========================================
+
+    private bool modoEdicion = false;
+
+    private bool confirmandoEliminacion = false;
+
+    private bool guardandoEdicion = false;
+
+    private bool eliminando = false;
+
+
+    // ==========================================
+    // DATOS DE EDICIÓN
+    // ==========================================
+
+    private string nombreEdicion = string.Empty;
+
+    private string emailEdicion = string.Empty;
+
+    private DateOnly fechaNacimientoEdicion;
+
+
+    // ==========================================
+    // VALIDACIONES
+    // ==========================================
+
+    private string mensajeNombreEdicion = string.Empty;
+
+    private string mensajeEmailEdicion = string.Empty;
+
+    private string mensajeFechaNacimientoEdicion = string.Empty;
+
+
+    // ==========================================
+    // INICIAR EDICIÓN
+    // ==========================================
+
+    private void IniciarEdicion()
+    {
+        nombreEdicion = Usuario.Nombre;
+
+        emailEdicion = Usuario.Email;
+
+        fechaNacimientoEdicion = Usuario.FechaNacimiento;
+
+        mensajeNombreEdicion = string.Empty;
+
+        mensajeEmailEdicion = string.Empty;
+
+        mensajeFechaNacimientoEdicion = string.Empty;
+
+        modoEdicion = true;
+
+        confirmandoEliminacion = false;
+    }
+
+
+    // ==========================================
+    // GUARDAR
+    // ==========================================
+
+    private async Task GuardarEdicion()
+    {
+        mensajeNombreEdicion = string.Empty;
+
+        mensajeEmailEdicion = string.Empty;
+
+        mensajeFechaNacimientoEdicion = string.Empty;
+
+
+        // VALIDAR NOMBRE
+
+        if (string.IsNullOrWhiteSpace(nombreEdicion))
+        {
+            mensajeNombreEdicion =
+                "El nombre es obligatorio.";
+
+            return;
+        }
+
+
+        // VALIDAR EMAIL
+
+        if (string.IsNullOrWhiteSpace(emailEdicion))
+        {
+            mensajeEmailEdicion =
+                "El email es obligatorio.";
+
+            return;
+        }
+
+        if (!new System.ComponentModel.DataAnnotations.EmailAddressAttribute()
+                .IsValid(emailEdicion.Trim()))
+        {
+            mensajeEmailEdicion =
+                "El email no es válido.";
+
+            return;
+        }
+
+
+        // VALIDAR FECHA DE NACIMIENTO
+
+        string? errorFecha =
+            ValidarFechaNacimiento(fechaNacimientoEdicion);
+
+        if (errorFecha != null)
+        {
+            mensajeFechaNacimientoEdicion = errorFecha;
+
+            return;
+        }
+
+
+        guardandoEdicion = true;
+
+        try
+        {
+            Usuario.Nombre =
+                nombreEdicion.Trim();
+
+            Usuario.Email =
+                emailEdicion.Trim();
+
+            Usuario.FechaNacimiento =
+                fechaNacimientoEdicion;
+
+
+            await OnGuardarEdicion
+                .InvokeAsync(Usuario);
+
+            modoEdicion = false;
+        }
+        finally
+        {
+            guardandoEdicion = false;
+        }
+    }
+
+
+    // ==========================================
+    // VALIDAR FECHA DE NACIMIENTO
+    // ==========================================
+
+    private static string? ValidarFechaNacimiento(
+        DateOnly fechaNacimiento)
+    {
+        if (fechaNacimiento == default)
+        {
+            return "La fecha de nacimiento es obligatoria.";
+        }
+
+        var hoy = DateOnly.FromDateTime(DateTime.Today);
+
+        if (fechaNacimiento > hoy)
+        {
+            return "La fecha de nacimiento no puede ser futura.";
+        }
+
+        int edad = hoy.Year - fechaNacimiento.Year;
+
+        if (fechaNacimiento > hoy.AddYears(-edad))
+        {
+            edad--;
+        }
+
+        if (edad < 16)
+        {
+            return "El usuario debe tener al menos 16 años.";
+        }
+
+        if (edad > 100)
+        {
+            return "La edad máxima permitida es de 100 años.";
+        }
+
+        return null;
+    }
+
+
+    // ==========================================
+    // CANCELAR EDICIÓN
+    // ==========================================
+
+    private void CancelarEdicion()
+    {
+        modoEdicion = false;
+
+        mensajeNombreEdicion = string.Empty;
+
+        mensajeEmailEdicion = string.Empty;
+
+        mensajeFechaNacimientoEdicion = string.Empty;
+    }
+
+
+    // ==========================================
+    // CONFIRMAR ELIMINACIÓN
+    // ==========================================
+
+    private void ConfirmarEliminacion()
+    {
+        confirmandoEliminacion = true;
+    }
+
+
+    // ==========================================
+    // CANCELAR ELIMINACIÓN
+    // ==========================================
+
+    private void CancelarEliminacion()
+    {
+        confirmandoEliminacion = false;
+    }
+
+
+    // ==========================================
+    // ELIMINAR
+    // ==========================================
+
+    private async Task Eliminar()
+    {
+        if (eliminando)
+            return;
+
+        eliminando = true;
+
+        try
+        {
+            await OnEliminar.InvokeAsync(Usuario);
+        }
+        finally
+        {
+            eliminando = false;
+        }
+    }
+}
