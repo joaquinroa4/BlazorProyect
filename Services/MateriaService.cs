@@ -90,6 +90,8 @@ public class MateriaService
         return true;
     }
     // Elimina una materia verificando que pertenezca al usuario
+    // Primero elimina las tareas asociadas para no violar
+    // la restricción FK_Tareas_Materias_MateriaId.
     public async Task<bool> EliminarMateriaAsync(
         int idMateria,
         int usuarioId)
@@ -107,8 +109,16 @@ public class MateriaService
             return false;
         }
 
+        // Tareas que dependen de esta materia
+        var tareas = await context.Tareas
+            .Where(t => t.MateriaId == idMateria)
+            .ToListAsync();
+
+        context.Tareas.RemoveRange(tareas);
+
         context.Materias.Remove(materia);
 
+        // EF ordena los DELETE: primero tareas, después materia
         await context.SaveChangesAsync();
 
         return true;
