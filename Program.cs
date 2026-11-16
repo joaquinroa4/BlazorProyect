@@ -27,6 +27,9 @@ builder.Services.AddScoped<ApplicationDbContext>(sp =>
     sp.GetRequiredService<IDbContextFactory<ApplicationDbContext>>()
       .CreateDbContext());
 
+// Necesario para que SignInManager acceda al HttpContext durante el SSR.
+builder.Services.AddHttpContextAccessor();
+
 // ASP.NET Identity
 builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
 {
@@ -42,6 +45,16 @@ builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+// Rutas de la cookie de autenticación.
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";
+    options.LogoutPath = "/logout";
+    options.AccessDeniedPath = "/acceso-denegado";
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    options.SlidingExpiration = true;
+});
 
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
@@ -75,5 +88,13 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+// El logout no se puede hacer desde el circuito interactivo:
+// se hace con un POST normal que limpia la cookie.
+app.MapPost("/logout", async (SignInManager<Usuario> signInManager) =>
+{
+    await signInManager.SignOutAsync();
+    return Results.Redirect("/login");
+}).RequireAuthorization();
 
 app.Run();
