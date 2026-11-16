@@ -37,8 +37,10 @@ public class MateriaService
         }
         await using var context =
             await _contextFactory.CreateDbContextAsync();
+        // Se usa Id (no IdUsuario): IdUsuario es un alias [NotMapped]
+        // y EF Core no puede traducirlo a SQL.
         bool usuarioExiste = await context.Usuarios
-        .AnyAsync(u => u.IdUsuario == usuarioId);
+        .AnyAsync(u => u.Id == usuarioId);
 
         if (!usuarioExiste)
         {
