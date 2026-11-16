@@ -1,0 +1,168 @@
+@page "/login"
+@layout AuthLayout
+
+@using Microsoft.AspNetCore.Identity
+@using ProyectoBlazor.Models
+
+@inject UserManager<Usuario> UserManager
+@inject SignInManager<Usuario> SignInManager
+@inject NavigationManager Navigation
+
+<PageTitle>Iniciar sesión</PageTitle>
+
+<div class="sf-login-card">
+
+    <div class="sf-login-head">
+
+        <h1>Iniciar sesión</h1>
+
+        <p>Ingresá con tu cuenta de StudyFlow.</p>
+
+    </div>
+
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        <div class="alert alert-danger d-flex align-items-start gap-2"
+             role="alert">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" class="sf-alert-icon">
+
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v4M12 16h.01" />
+
+            </svg>
+
+            <span>@mensaje</span>
+
+        </div>
+    }
+
+    <EditForm Model="Input"
+              method="post"
+              OnValidSubmit="LoginUser"
+              FormName="login">
+
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+
+            <label for="login-email" class="form-label">
+                Email
+            </label>
+
+            <InputText id="login-email"
+                       class="form-control form-control-lg"
+                       autocomplete="username"
+                       placeholder="tu@email.com"
+                       @bind-Value="Input.Email" />
+
+            <ValidationMessage For="() => Input.Email"
+                               class="text-danger" />
+
+        </div>
+
+        <div class="mb-3">
+
+            <label for="login-password" class="form-label">
+                Contraseña
+            </label>
+
+            <InputText id="login-password"
+                       type="password"
+                       class="form-control form-control-lg"
+                       autocomplete="current-password"
+                       placeholder="••••••••"
+                       @bind-Value="Input.Password" />
+
+            <ValidationMessage For="() => Input.Password"
+                               class="text-danger" />
+
+        </div>
+
+        <div class="form-check mb-4">
+
+            <InputCheckbox id="login-remember"
+                           class="form-check-input"
+                           @bind-Value="Input.RememberMe" />
+
+            <label for="login-remember" class="form-check-label">
+                Recordarme
+            </label>
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary btn-lg w-100">
+            Ingresar
+        </button>
+
+    </EditForm>
+
+    <p class="sf-login-help">
+        ¿No tenés cuenta?
+        Pedile al administrador que te cree una.
+    </p>
+
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    private LoginModel Input { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    private string mensaje = string.Empty;
+
+    private async Task LoginUser()
+    {
+        mensaje = string.Empty;
+
+        var email = Input.Email.Trim();
+
+        var usuario = await UserManager.FindByEmailAsync(email);
+
+        if (usuario is null)
+        {
+            mensaje = "Email o contraseña incorrectos.";
+            return;
+        }
+
+        var resultado = await SignInManager.PasswordSignInAsync(
+            usuario,
+            Input.Password,
+            Input.RememberMe,
+            lockoutOnFailure: false);
+
+        if (!resultado.Succeeded)
+        {
+            mensaje = resultado.IsLockedOut
+                ? "La cuenta está bloqueada temporalmente. Intentá más tarde."
+                : "Email o contraseña incorrectos.";
+
+            return;
+        }
+
+        Navigation.NavigateTo(DestinoSeguro(), forceLoad: true);
+    }
+
+    private string DestinoSeguro()
+    {
+        if (string.IsNullOrWhiteSpace(ReturnUrl))
+            return "/";
+
+        // Evita redirecciones a sitios externos.
+        if (!ReturnUrl.StartsWith('/')
+            || ReturnUrl.StartsWith("//")
+            || ReturnUrl.StartsWith("/\\"))
+        {
+            return "/";
+        }
+
+        return ReturnUrl;
+    }
+
+}
