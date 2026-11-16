@@ -17,7 +17,7 @@ builder.Services.AddRadzenComponents();
 
 builder.Services.AddBlazoredLocalStorage();
 
-// Entity Framework Core
+// Entity Framework Core - Conexion a base de datos 
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
