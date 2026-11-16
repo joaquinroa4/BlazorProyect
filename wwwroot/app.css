@@ -1,51 +1,590 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+/* ==========================================================
+   StudyFlow · sistema de diseño
+   Inspirado en Tabler (https://tabler.io, MIT) sobre Bootstrap 5.3
+   ==========================================================
+   Los colores propios viven en variables --sf-* y cambian
+   solos cuando <html data-bs-theme="dark">.
+   ========================================================== */
+
+:root {
+    /* Marca */
+    --sf-brand: #4f46e5;
+    --sf-brand-hover: #4338ca;
+    --sf-brand-soft: rgba(79, 70, 229, .14);
+    --sf-on-brand: #ffffff;
+    --sf-accent: #0ea5e9;
+
+    /* Superficies */
+    --sf-bg: #f4f6fb;
+    --sf-surface: #ffffff;
+    --sf-surface-2: #f8fafc;
+    --sf-border: #e6e9f0;
+    --sf-text: #111827;
+    --sf-muted: #667085;
+
+    /* Barra lateral y topbar */
+    --sf-sidebar-bg: #ffffff;
+    --sf-sidebar-border: #e6e9f0;
+    --sf-topbar-bg: rgba(255, 255, 255, .86);
+
+    /* Medidas */
+    --sf-radius: 16px;
+    --sf-radius-sm: 10px;
+    --sf-sidebar-w: 264px;
+    --sf-topbar-h: 66px;
+
+    /* Tamaño base de la tipografía. Todo lo demás usa rem, así que
+       este valor escala la página completa. */
+    --sf-font-size: 20px;
+
+    /* Sombras */
+    --sf-shadow-sm: 0 1px 2px rgba(16, 24, 40, .06);
+    --sf-shadow: 0 18px 40px -24px rgba(16, 24, 40, .35);
 }
 
-a, .btn-link {
-    color: #006bb7;
+html[data-bs-theme="dark"] {
+    --sf-brand: #818cf8;
+    --sf-brand-hover: #a5b4fc;
+    --sf-brand-soft: rgba(129, 140, 248, .18);
+    --sf-on-brand: #0b1220;
+    --sf-accent: #38bdf8;
+
+    --sf-bg: #0b1220;
+    --sf-surface: #111827;
+    --sf-surface-2: #0f172a;
+    --sf-border: #1f2937;
+    --sf-text: #e5e7eb;
+    --sf-muted: #94a3b8;
+
+    --sf-sidebar-bg: #0f172a;
+    --sf-sidebar-border: #1f2937;
+    --sf-topbar-bg: rgba(15, 23, 42, .86);
+
+    --sf-shadow-sm: 0 1px 2px rgba(0, 0, 0, .5);
+    --sf-shadow: 0 18px 40px -24px rgba(0, 0, 0, .8);
+
+    /* Radzen (DataGrid de Usuarios) */
+    --rz-base-background-color: #111827;
+    --rz-body-background-color: #0b1220;
+    --rz-text-color: #e5e7eb;
+    --rz-text-secondary-color: #94a3b8;
+    --rz-base-100: #0f172a;
+    --rz-base-200: #111827;
+    --rz-base-300: #1f2937;
+    --rz-base-400: #334155;
+
+    /* Filas alternas del DataGrid: por defecto Radzen usa --rz-base-50
+       (#fafafa), que en modo oscuro deja filas blancas. */
+    --rz-grid-stripe-background-color: var(--sf-surface-2);
+
+    /* Encabezados del DataGrid: Radzen los pinta con
+       --rz-grid-header-color -> --rz-text-title-color -> --rz-base-900
+       (#212121), un gris oscuro ilegible sobre el fondo oscuro. */
+    --rz-grid-header-color: var(--sf-muted);
+    --rz-grid-header-background-color: var(--sf-surface-2);
+}
+
+/* ==========================================================
+   Base
+   ========================================================== */
+
+html,
+body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: var(--sf-font-size);
+}
+
+body {
+    background-color: var(--sf-bg);
+    color: var(--sf-text);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: var(--sf-text);
+}
+
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+a,
+.btn-link {
+    color: var(--sf-brand);
+    text-decoration: none;
+}
+
+a:hover,
+.btn-link:hover {
+    color: var(--sf-brand-hover);
+}
+
+hr {
+    border-color: var(--sf-border);
+    opacity: 1;
+}
+
+.text-muted {
+    color: var(--sf-muted) !important;
+}
+
+/* Scrollbar discreta */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--sf-border) transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: var(--sf-border);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+}
+
+/* ==========================================================
+   Botones
+   ========================================================== */
+
+.btn {
+    --bs-btn-border-radius: var(--sf-radius-sm);
+    --bs-btn-font-weight: 600;
+    --bs-btn-padding-x: 1rem;
+    --bs-btn-padding-y: .55rem;
+}
+
+.btn-sm {
+    --bs-btn-padding-y: .35rem;
+    --bs-btn-padding-x: .7rem;
+    --bs-btn-font-size: .82rem;
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    --bs-btn-bg: var(--sf-brand);
+    --bs-btn-border-color: var(--sf-brand);
+    --bs-btn-color: var(--sf-on-brand);
+    --bs-btn-hover-bg: var(--sf-brand-hover);
+    --bs-btn-hover-border-color: var(--sf-brand-hover);
+    --bs-btn-hover-color: var(--sf-on-brand);
+    --bs-btn-active-bg: var(--sf-brand-hover);
+    --bs-btn-active-border-color: var(--sf-brand-hover);
+    --bs-btn-active-color: var(--sf-on-brand);
+    --bs-btn-disabled-bg: var(--sf-brand);
+    --bs-btn-disabled-border-color: var(--sf-brand);
+    --bs-btn-disabled-color: var(--sf-on-brand);
+    --bs-btn-focus-shadow-rgb: 79, 70, 229;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn-outline-primary {
+    --bs-btn-color: var(--sf-brand);
+    --bs-btn-border-color: var(--sf-brand);
+    --bs-btn-hover-bg: var(--sf-brand);
+    --bs-btn-hover-border-color: var(--sf-brand);
+    --bs-btn-hover-color: var(--sf-on-brand);
+    --bs-btn-active-bg: var(--sf-brand-hover);
+    --bs-btn-active-border-color: var(--sf-brand-hover);
+    --bs-btn-active-color: var(--sf-on-brand);
 }
 
-.content {
-    padding-top: 1.1rem;
+.btn-outline-secondary {
+    --bs-btn-color: var(--sf-muted);
+    --bs-btn-border-color: var(--sf-border);
+    --bs-btn-hover-bg: var(--sf-surface-2);
+    --bs-btn-hover-border-color: var(--sf-border);
+    --bs-btn-hover-color: var(--sf-text);
+    --bs-btn-active-bg: var(--sf-surface-2);
+    --bs-btn-active-border-color: var(--sf-border);
+    --bs-btn-active-color: var(--sf-text);
 }
 
-h1:focus {
-    outline: none;
+.btn-light {
+    --bs-btn-bg: var(--sf-surface-2);
+    --bs-btn-border-color: var(--sf-border);
+    --bs-btn-color: var(--sf-text);
+    --bs-btn-hover-bg: var(--sf-border);
+    --bs-btn-hover-border-color: var(--sf-border);
+    --bs-btn-hover-color: var(--sf-text);
 }
 
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
+.btn:focus-visible,
+.btn-link:focus-visible,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 .2rem var(--sf-brand-soft);
 }
 
-.invalid {
-    outline: 1px solid #e50000;
+/* ==========================================================
+   Formularios
+   ========================================================== */
+
+.form-label {
+    font-weight: 600;
+    font-size: .85rem;
+    margin-bottom: .35rem;
+    color: var(--sf-text);
 }
 
-.validation-message {
-    color: #e50000;
+.form-control,
+.form-select {
+    background-color: var(--sf-surface);
+    border-color: var(--sf-border);
+    color: var(--sf-text);
+    border-radius: var(--sf-radius-sm);
+    padding: .55rem .8rem;
+}
+
+.form-control::placeholder {
+    color: var(--sf-muted);
+    opacity: .8;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--sf-surface);
+    border-color: var(--sf-brand);
+    color: var(--sf-text);
+}
+
+.form-control-color {
+    width: 3.25rem;
+    height: 2.5rem;
+    padding: .2rem;
+}
+
+.form-check-input:checked {
+    background-color: var(--sf-brand);
+    border-color: var(--sf-brand);
+}
+
+.input-group-text {
+    background-color: var(--sf-surface-2);
+    border-color: var(--sf-border);
+    color: var(--sf-muted);
+    border-radius: var(--sf-radius-sm);
+}
+
+.validation-message,
+.text-danger {
+    color: #dc3545 !important;
+    font-size: .82rem;
+}
+
+html[data-bs-theme="dark"] .validation-message,
+html[data-bs-theme="dark"] .text-danger {
+    color: #f87171 !important;
+}
+
+/* ==========================================================
+   Tarjetas
+   ========================================================== */
+
+.card {
+    --bs-card-bg: var(--sf-surface);
+    --bs-card-border-color: var(--sf-border);
+    --bs-card-border-radius: var(--sf-radius);
+    --bs-card-inner-border-radius: calc(var(--sf-radius) - 1px);
+    --bs-card-cap-bg: transparent;
+    --bs-card-color: var(--sf-text);
+    box-shadow: var(--sf-shadow-sm);
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--sf-border);
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-title {
+    font-weight: 700;
+}
+
+/* ==========================================================
+   Alertas y badges
+   ========================================================== */
+
+.alert {
+    border-radius: var(--sf-radius-sm);
+    border-width: 1px;
+    font-size: .9rem;
+}
+
+.badge {
+    font-weight: 600;
+    border-radius: 999px;
+    padding: .35em .7em;
+}
+
+/* ==========================================================
+   Piezas compartidas
+   ========================================================== */
+
+.sf-page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+}
+
+.sf-page-header h1,
+.sf-page-header h2 {
+    margin-bottom: .25rem;
+}
+
+.sf-page-header p {
+    margin-bottom: 0;
+    color: var(--sf-muted);
+}
+
+.sf-eyebrow {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--sf-brand);
+    margin-bottom: .4rem;
+}
+
+.sf-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .75rem;
+    border-radius: 999px;
+    background: var(--sf-surface);
+    border: 1px solid var(--sf-border);
+    color: var(--sf-muted);
+    font-size: .8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.sf-chip .sf-dot {
+    width: .5rem;
+    height: .5rem;
+    border-radius: 50%;
+    background: #22c55e;
+}
+
+.sf-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--sf-border);
+    border-radius: 12px;
+    background: var(--sf-surface);
+    color: var(--sf-muted);
+    cursor: pointer;
+    transition: background-color .15s ease, color .15s ease,
+        border-color .15s ease, transform .15s ease;
+}
+
+.sf-icon-btn:hover {
+    background: var(--sf-surface-2);
+    color: var(--sf-text);
+    border-color: var(--sf-border);
+}
+
+.sf-icon-btn:active {
+    transform: translateY(1px);
+}
+
+.sf-icon-btn svg {
+    width: 19px;
+    height: 19px;
+}
+
+/* Botón de tema: muestra sol u luna según el atributo del html */
+.sf-theme-toggle .sf-icon-moon { display: none; }
+.sf-theme-toggle .sf-icon-sun { display: inline-block; }
+
+html[data-bs-theme="dark"] .sf-theme-toggle .sf-icon-moon { display: inline-block; }
+html[data-bs-theme="dark"] .sf-theme-toggle .sf-icon-sun { display: none; }
+
+/* ==========================================================
+   Contenido de páginas
+   ========================================================== */
+
+.sf-page {
+    animation: sf-fade-in .25s ease;
+}
+
+@keyframes sf-fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.sf-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: var(--sf-muted);
+    border: 1px dashed var(--sf-border);
+    border-radius: var(--sf-radius);
+    background: var(--sf-surface);
+}
+
+.sf-empty svg {
+    width: 32px;
+    height: 32px;
+    opacity: .6;
+}
+
+/* ==========================================================
+   Tablas de Bootstrap (si se usan)
+   ========================================================== */
+
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--sf-text);
+    --bs-table-border-color: var(--sf-border);
+}
+
+/* ==========================================================
+   Error de Blazor
+   ========================================================== */
+
+#blazor-error-ui {
+    background: #111827;
+    color: #f9fafb;
+    bottom: 0;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, .35);
+    display: none;
+    left: 0;
+    padding: .8rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1080;
+    font-size: .9rem;
+}
+
+#blazor-error-ui a {
+    color: #a5b4fc;
+    font-weight: 600;
+    margin-left: .5rem;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: .9rem;
+    top: .55rem;
 }
 
 .blazor-error-boundary {
-    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
+    background: #b32121;
     padding: 1rem 1rem 1rem 3.7rem;
     color: white;
+    border-radius: var(--sf-radius-sm);
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+.blazor-error-boundary::after {
+    content: "Ocurrió un error.";
+}
 
-.darker-border-checkbox.form-check-input {
-    border-color: #929292;
+/* ==========================================================
+   Radzen · ajustes para modo oscuro
+   ========================================================== */
+
+html[data-bs-theme="dark"] .rz-datatable,
+html[data-bs-theme="dark"] .rz-grid-table,
+html[data-bs-theme="dark"] .rz-datatable-tablewrapper > table,
+html[data-bs-theme="dark"] .rz-datatable-scrollable-header-box > table,
+html[data-bs-theme="dark"] .rz-datatable-scrollable-table-wrapper > table {
+    background-color: var(--sf-surface);
+    color: var(--sf-text);
+}
+
+html[data-bs-theme="dark"] .rz-datatable-thead > tr > th,
+html[data-bs-theme="dark"] .rz-grid-table thead th {
+    background-color: var(--sf-surface-2);
+    color: var(--sf-muted);
+    border-color: var(--sf-border);
+}
+
+html[data-bs-theme="dark"] .rz-datatable-tbody > tr > td,
+html[data-bs-theme="dark"] .rz-grid-table tbody td {
+    background-color: var(--sf-surface);
+    color: var(--sf-text);
+    border-color: var(--sf-border);
+}
+
+html[data-bs-theme="dark"] .rz-datatable-tbody > tr:hover > td,
+html[data-bs-theme="dark"] .rz-grid-table tbody tr:hover td {
+    background-color: var(--sf-surface-2);
+}
+
+html[data-bs-theme="dark"] .rz-datatable-emptymessage,
+html[data-bs-theme="dark"] .rz-paginator,
+html[data-bs-theme="dark"] .rz-paginator-bottom {
+    background-color: var(--sf-surface);
+    color: var(--sf-muted);
+    border-color: var(--sf-border);
+}
+
+html[data-bs-theme="dark"] .rz-paginator a,
+html[data-bs-theme="dark"] .rz-paginator .rz-paginator-page,
+html[data-bs-theme="dark"] .rz-paginator-element {
+    color: var(--sf-muted);
+}
+
+html[data-bs-theme="dark"] .rz-paginator .rz-state-active {
+    background-color: var(--sf-brand);
+    border-color: var(--sf-brand);
+    color: var(--sf-on-brand);
+}
+
+html[data-bs-theme="dark"] .rz-inputtext,
+html[data-bs-theme="dark"] .rz-textbox,
+html[data-bs-theme="dark"] .rz-dropdown {
+    background-color: var(--sf-surface);
+    color: var(--sf-text);
+    border-color: var(--sf-border);
+}
+
+/* Botones neutros de Radzen (p. ej. el calendario del filtro de fechas).
+   El tema material los pinta con --rz-base (#eee), que es claro. */
+html[data-bs-theme="dark"] .rz-button.rz-base.rz-shade-default {
+    background-color: var(--sf-surface-2);
+    color: var(--sf-text);
+}
+
+html[data-bs-theme="dark"] .rz-button.rz-base.rz-shade-default:hover {
+    background-color: var(--sf-border);
+    color: var(--sf-text);
+}
+
+/* ==========================================================
+   Impresión
+   ========================================================== */
+
+@media print {
+    .sf-sidebar,
+    .sf-topbar,
+    .sf-footer {
+        display: none !important;
+    }
 }
