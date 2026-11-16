@@ -1,12 +1,32 @@
+@page "/registro"
+
+@attribute [Authorize(Roles = "Admin")]
+
 @using ProyectoBlazor.Models
 @using ProyectoBlazor.Services
 
 @inject UsuarioService UsuarioService
-@inject UsuarioActualService UsuarioActualService
 
-<div class="container mt-4">
+@rendermode InteractiveServer
 
-    <h3>Formulario de Registro de Usuarios</h3>
+<div class="container mt-4 sf-page">
+
+    <div class="sf-page-header">
+
+        <div>
+
+            <span class="sf-eyebrow">Administración</span>
+
+            <h1>Registrar usuario</h1>
+
+            <p>
+                Creá una cuenta nueva. El usuario podrá ingresar con el
+                email y la contraseña que definas.
+            </p>
+
+        </div>
+
+    </div>
 
     <!-- ====================================================== -->
     <!-- FORMULARIO + RESUMEN -->
@@ -114,7 +134,7 @@
 
                     @if (!string.IsNullOrEmpty(mensaje))
                     {
-                        <div class="alert alert-info mt-3 mb-0">
+                        <div class="alert @(registroExitoso ? "alert-success" : "alert-danger") mt-3 mb-0">
                             @mensaje
                         </div>
                     }
@@ -189,6 +209,8 @@
 
     private string mensaje = string.Empty;
 
+    private bool registroExitoso = false;
+
     private bool registrando = false;
 
 
@@ -203,6 +225,7 @@
 
         registrando = true;
         mensaje = string.Empty;
+        registroExitoso = false;
 
         try
         {
@@ -215,8 +238,7 @@
 
             if (usuarioRegistrado != null)
             {
-                await UsuarioActualService.EstablecerUsuarioAsync(
-                    usuarioRegistrado.IdUsuario);
+                registroExitoso = true;
 
                 mensaje = "Usuario registrado correctamente.";
 
@@ -228,10 +250,15 @@
                     "Ya existe un usuario registrado con ese email.";
             }
         }
+        catch (InvalidOperationException ex)
+        {
+            // Errores de validación de Identity (por ejemplo,
+            // la contraseña no cumple la política).
+            mensaje = ex.Message;
+        }
         finally
         {
             registrando = false;
         }
     }
-
 }
