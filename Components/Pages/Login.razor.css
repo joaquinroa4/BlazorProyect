@@ -1,0 +1,46 @@
+.sf-login-card {
+    width: 100%;
+    max-width: 430px;
+    padding: 2rem;
+    background-color: var(--sf-surface);
+    border: 1px solid var(--sf-border);
+    border-radius: var(--sf-radius);
+    box-shadow: var(--sf-shadow);
+}
+
+.sf-login-head {
+    margin-bottom: 1.6rem;
+}
+
+.sf-login-head h1 {
+    margin-bottom: .35rem;
+    font-size: 1.55rem;
+}
+
+.sf-login-head p {
+    margin: 0;
+    color: var(--sf-muted);
+    font-size: .9rem;
+}
+
+.sf-alert-icon {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+.sf-login-help {
+    margin: 1.5rem 0 0;
+    text-align: center;
+    color: var(--sf-muted);
+    font-size: .84rem;
+}
+
+@media (max-width: 575.98px) {
+
+    .sf-login-card {
+        padding: 1.5rem;
+        box-shadow: var(--sf-shadow-sm);
+    }
+}
