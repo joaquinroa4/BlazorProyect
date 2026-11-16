@@ -1,23 +1,159 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
+<div class="sf-shell">
+
+    <aside class="sf-sidebar">
         <NavMenu />
+    </aside>
+
+    <div class="sf-backdrop" onclick="sfLayout.closeSidebar()"></div>
+
+    <div class="sf-main">
+
+        <header class="sf-topbar">
+
+            <button type="button"
+                    class="sf-icon-btn sf-menu-btn"
+                    onclick="sfLayout.toggleSidebar()"
+                    aria-label="Abrir menú">
+
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round">
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+
+            </button>
+
+            <span class="sf-topbar-brand d-lg-none">
+                StudyFlow
+            </span>
+
+            <div class="sf-topbar-spacer"></div>
+
+            <div class="sf-topbar-actions">
+
+                <button type="button"
+                        class="sf-icon-btn sf-theme-toggle"
+                        onclick="sfTheme.toggle()"
+                        title="Cambiar entre modo claro y oscuro"
+                        aria-label="Cambiar entre modo claro y oscuro">
+
+                    <!-- Sol (modo claro) -->
+                    <svg class="sf-icon-sun" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round">
+
+                        <circle cx="12" cy="12" r="4" />
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+
+                    </svg>
+
+                    <!-- Luna (modo oscuro) -->
+                    <svg class="sf-icon-moon" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round">
+
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
+
+                    </svg>
+
+                </button>
+
+                <AuthorizeView>
+                    <Authorized Context="auth">
+
+                        @{
+                            var nombre = auth.User.Identity?.Name ?? "Usuario";
+
+                            var inicial = nombre.Length > 0
+                                ? nombre.Substring(0, 1).ToUpperInvariant()
+                                : "U";
+
+                            var rol = auth.User.IsInRole("Admin")
+                                ? "Administrador"
+                                : "Estudiante";
+                        }
+
+                        <div class="dropdown">
+
+                            <button type="button"
+                                    class="sf-user-btn dropdown-toggle"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+
+                                <span class="sf-avatar">@inicial</span>
+
+                                <span class="sf-user-meta d-none d-md-flex">
+                                    <span class="sf-user-name">@nombre</span>
+                                    <span class="sf-user-role">@rol</span>
+                                </span>
+
+                            </button>
+
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                                <li class="px-3 py-2">
+                                    <div class="sf-user-name">@nombre</div>
+                                    <div class="sf-user-role">@rol</div>
+                                </li>
+
+                                <li><hr class="dropdown-divider" /></li>
+
+                                <li>
+                                    <form method="post" action="/logout" class="m-0">
+                                        <AntiforgeryToken />
+
+                                        <button type="submit"
+                                                class="dropdown-item sf-logout">
+
+                                            <svg viewBox="0 0 24 24" fill="none"
+                                                 stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round"
+                                                 stroke-linejoin="round">
+
+                                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                                <path d="M16 17l5-5-5-5M21 12H9" />
+
+                                            </svg>
+
+                                            Cerrar sesión
+
+                                        </button>
+                                    </form>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </Authorized>
+
+                    <NotAuthorized>
+                        <a href="/login" class="btn btn-primary btn-sm">
+                            Iniciar sesión
+                        </a>
+                    </NotAuthorized>
+                </AuthorizeView>
+
+            </div>
+
+        </header>
+
+        <main class="sf-content">
+            @Body
+        </main>
+
+        <footer class="sf-footer">
+            <span>StudyFlow · Organizá tu estudio</span>
+            <span>© @DateTime.Now.Year</span>
+        </footer>
+
     </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
 </div>
 
 <div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
+    Ocurrió un error inesperado.
+    <a href="" class="reload">Recargar</a>
+    <a class="dismiss">✕</a>
 </div>
