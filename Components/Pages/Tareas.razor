@@ -1,5 +1,5 @@
 @page "/tareas"
-
+@attribute [Authorize]
 @using ProyectoBlazor.Models
 @using ProyectoBlazor.Services
 @using ProyectoBlazor.Shared
@@ -12,11 +12,23 @@
 
 <PageTitle>Tareas</PageTitle>
 
-<div class="container mt-4">
+<div class="container mt-4 sf-page">
 
-    <h3 class="mb-4">
-        Tareas
-    </h3>
+    <div class="sf-page-header">
+
+        <div>
+
+            <span class="sf-eyebrow">Organización</span>
+
+            <h1>Tareas</h1>
+
+            <p>
+                Creá tareas, asignales una materia y seguí su estado.
+            </p>
+
+        </div>
+
+    </div>
 
     <div class="row">
 
