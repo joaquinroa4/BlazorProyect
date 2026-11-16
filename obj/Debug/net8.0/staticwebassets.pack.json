@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets/app.css"
     },
     {
+      "Id": "/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/wwwroot/bootstrap/bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets/bootstrap/bootstrap.bundle.min.js"
+    },
+    {
       "Id": "/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/wwwroot/bootstrap/bootstrap.min.css",
       "PackagePath": "staticwebassets/bootstrap/bootstrap.min.css"
     },
@@ -19,6 +23,10 @@
     {
       "Id": "/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/wwwroot/favicon.png",
       "PackagePath": "staticwebassets/favicon.png"
+    },
+    {
+      "Id": "/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/wwwroot/js/theme.js",
+      "PackagePath": "staticwebassets/js/theme.js"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.ProyectoBlazor.Microsoft.AspNetCore.StaticWebAssets.props",
