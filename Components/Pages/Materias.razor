@@ -1,5 +1,5 @@
 @page "/materias"
-
+@attribute [Authorize]
 @using ProyectoBlazor.Models
 @using ProyectoBlazor.Services
 @using ProyectoBlazor.Shared
@@ -11,21 +11,26 @@
 
 <PageTitle>Materias</PageTitle>
 
-<div class="container mt-4">
+<div class="container mt-4 sf-page">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="sf-page-header">
 
         <div>
 
-            <h2>Mis Materias</h2>
+            <span class="sf-eyebrow">Estudio</span>
 
-            <p class="text-muted">
+            <h1>Mis materias</h1>
+
+            <p>
                 Organizá tus materias y asociá tus tareas a cada una.
-            </p> <br>
-            <h3>
-    Usuario actual: @UsuarioActualService.UsuarioId </h3>
+            </p>
 
         </div>
+
+        <span class="sf-chip">
+            <span class="sf-dot"></span>
+            @UsuarioActualService.NombreUsuario
+        </span>
 
     </div>
 
