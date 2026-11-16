@@ -1,7 +1,168 @@
 ﻿@page "/"
 
-<PageTitle>Registros</PageTitle>
+@attribute [Authorize]
 
+<PageTitle>Inicio</PageTitle>
 
+<div class="sf-page">
 
-<Registro @rendermode="InteractiveServer"/>
+    <AuthorizeView>
+        <Authorized Context="auth">
+
+            @{
+                var nombre = auth.User.Identity?.Name ?? string.Empty;
+
+                var hora = DateTime.Now.Hour;
+
+                var saludo = hora < 12
+                    ? "Buenos días"
+                    : hora < 20
+                        ? "Buenas tardes"
+                        : "Buenas noches";
+            }
+
+            <section class="sf-hero">
+
+                <div class="sf-hero-text">
+
+                    <span class="sf-eyebrow">Panel de estudio</span>
+
+                    <h1>@saludo 👋</h1>
+
+                    <p>
+                        @nombre · Elegí por dónde seguir.
+                    </p>
+
+                </div>
+
+                <span class="sf-chip">
+                    <span class="sf-dot"></span>
+                    Sesión activa
+                </span>
+
+            </section>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-xl-4">
+
+                    <a href="/materias" class="sf-action-card">
+
+                        <span class="sf-action-icon sf-icon-indigo">
+                            <svg viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+
+                            </svg>
+                        </span>
+
+                        <span class="sf-action-body">
+                            <h3>Materias</h3>
+                            <p>Organizá tus materias y sus colores.</p>
+                        </span>
+
+                        <span class="sf-action-arrow">
+                            <svg viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+
+                            </svg>
+                        </span>
+
+                    </a>
+
+                </div>
+
+                <div class="col-md-6 col-xl-4">
+
+                    <a href="/tareas" class="sf-action-card">
+
+                        <span class="sf-action-icon sf-icon-cyan">
+                            <svg viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+
+                                <path d="M9 11l3 3L22 4" />
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+
+                            </svg>
+                        </span>
+
+                        <span class="sf-action-body">
+                            <h3>Tareas</h3>
+                            <p>Creá y seguí el estado de tus tareas.</p>
+                        </span>
+
+                        <span class="sf-action-arrow">
+                            <svg viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round">
+
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+
+                            </svg>
+                        </span>
+
+                    </a>
+
+                </div>
+
+                <AuthorizeView Roles="Admin">
+                    <Authorized Context="adminContext">
+
+                        <div class="col-md-6 col-xl-4">
+
+                            <a href="/usuarios" class="sf-action-card">
+
+                                <span class="sf-action-icon sf-icon-amber">
+                                    <svg viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round">
+
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+
+                                    </svg>
+                                </span>
+
+                                <span class="sf-action-body">
+                                    <h3>Usuarios</h3>
+                                    <p>Administrá los usuarios registrados.</p>
+                                </span>
+
+                                <span class="sf-action-arrow">
+                                    <svg viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round">
+
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+
+                                    </svg>
+                                </span>
+
+                            </a>
+
+                        </div>
+
+                    </Authorized>
+                </AuthorizeView>
+
+            </div>
+
+        </Authorized>
+    </AuthorizeView>
+
+</div>
