@@ -1,5 +1,6 @@
 @page "/usuarios"
 
+@attribute [Authorize(Roles = "Admin")]
 @using ProyectoBlazor.Models
 @using ProyectoBlazor.Services
 @using ProyectoBlazor.Shared
@@ -10,15 +11,21 @@
 
 <PageTitle>Administración de usuarios</PageTitle>
 
-<div class="container mt-4">
+<div class="container mt-4 sf-page">
 
-    <div class="mb-4">
+    <div class="sf-page-header">
 
-        <h2>Administración de usuarios</h2>
+        <div>
 
-        <p class="text-muted mb-0">
-            Consultá y administrá los usuarios registrados en StudyFlow.
-        </p>
+            <span class="sf-eyebrow">Administración</span>
+
+            <h1>Usuarios</h1>
+
+            <p>
+                Consultá y administrá los usuarios registrados en StudyFlow.
+            </p>
+
+        </div>
 
     </div>
 
@@ -298,7 +305,7 @@
                     textoBusqueda,
                     StringComparison.OrdinalIgnoreCase)
                 ||
-                u.Email.Contains(
+                (u.Email ?? string.Empty).Contains(
                     textoBusqueda,
                     StringComparison.OrdinalIgnoreCase));
 
@@ -404,7 +411,7 @@
         bool actualizado = await UsuarioService.ActualizarUsuarioAsync(
             usuario.IdUsuario,
             usuario.Nombre,
-            usuario.Email,
+            usuario.Email ?? string.Empty,
             usuario.FechaNacimiento
         );
 
