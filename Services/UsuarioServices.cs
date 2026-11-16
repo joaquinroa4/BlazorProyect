@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProyectoBlazor.Data;
 using ProyectoBlazor.Models;
@@ -7,12 +8,19 @@ namespace ProyectoBlazor.Services;
 public class UsuarioService
 {
     private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+    private readonly UserManager<Usuario> _userManager;
 
     public UsuarioService(
-        IDbContextFactory<ApplicationDbContext> contextFactory)
+        IDbContextFactory<ApplicationDbContext> contextFactory,
+        UserManager<Usuario> userManager)
     {
         _contextFactory = contextFactory;
+        _userManager = userManager;
     }
+
+    // ==========================================================
+    // REGISTRAR
+    // ==========================================================
 
     public async Task<Usuario?> RegistrarUsuarioAsync(
     string nombre,
@@ -20,46 +28,48 @@ public class UsuarioService
     string password,
     DateOnly fechaNacimiento)
     {
-        await using var context =
-            await _contextFactory.CreateDbContextAsync();
+        email = email.Trim();
 
-        bool existe = await context.Usuarios
-            .AnyAsync(u => u.Email == email);
-
-        if (existe)
+        // Identity exige email único: si ya existe, no creamos nada.
+        if (await _userManager.FindByEmailAsync(email) is not null)
         {
             return null;
         }
 
         var usuario = new Usuario
         {
-            Nombre = nombre,
+            UserName = email,
             Email = email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+            Nombre = nombre.Trim(),
             FechaNacimiento = fechaNacimiento,
-            FechaRegistro = DateTime.Now
+            FechaRegistro = DateTime.Now,
+            EmailConfirmed = true
         };
 
-        context.Usuarios.Add(usuario);
+        // CreateAsync hashea la contraseña con Identity y completa
+        // NormalizedEmail, NormalizedUserName y SecurityStamp.
+        var creacion = await _userManager.CreateAsync(usuario, password);
 
-        try
+        if (!creacion.Succeeded)
         {
-            await context.SaveChangesAsync();
-
-            return usuario;
-        }
-        catch (DbUpdateException ex)
-        {
-            if (ex.InnerException?.Message.Contains("IX_Usuarios_Email") == true)
+            // Carrera con otro registro del mismo email.
+            if (creacion.Errors.Any(e => e.Code == "DuplicateEmail"))
             {
                 return null;
             }
 
-            // Si fue otro error de base de datos,
-            // no lo ocultamos.
-            throw;
+            // Errores de política de contraseña, etc.
+            throw new InvalidOperationException(
+                string.Join(" ", creacion.Errors.Select(e => e.Description)));
         }
+
+        return usuario;
     }
+
+    // ==========================================================
+    // LISTAR
+    // ==========================================================
+
     public async Task<List<Usuario>> ObtenerUsuariosAsync()
     {
         await using var context =
@@ -79,18 +89,18 @@ public class UsuarioService
             .FirstOrDefaultAsync(u => u.Id == idUsuario);
     }
 
+    // ==========================================================
+    // ACTUALIZAR
+    // ==========================================================
+
     public async Task<bool> ActualizarUsuarioAsync(
     int idUsuario,
     string nombre,
     string email,
     DateOnly fechaNacimiento)
     {
-        await using var context =
-            await _contextFactory.CreateDbContextAsync();
-
-        // Buscar el usuario
-        var usuario = await context.Usuarios
-            .FirstOrDefaultAsync(u => u.Id == idUsuario);
+        var usuario = await _userManager.FindByIdAsync(
+            idUsuario.ToString());
 
         if (usuario == null)
         {
@@ -102,38 +112,63 @@ public class UsuarioService
         email = email.Trim();
 
         // Comprobar que el email no pertenezca a otro usuario
-        bool emailExiste = await context.Usuarios
-            .AnyAsync(u =>
-                u.Email == email &&
-                u.Id != idUsuario);
+        var otroUsuario = await _userManager.FindByEmailAsync(email);
 
-        if (emailExiste)
+        if (otroUsuario != null && otroUsuario.Id != idUsuario)
         {
             return false;
         }
 
         // Actualizar los datos personales
         usuario.Nombre = nombre;
-        usuario.Email = email;
         usuario.FechaNacimiento = fechaNacimiento;
 
-        await context.SaveChangesAsync();
+        // El email se cambia con UserManager para que también
+        // se actualicen NormalizedEmail y UserName; si no, el
+        // usuario deja de poder iniciar sesión.
+        if (!string.Equals(
+                usuario.Email,
+                email,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            var cambioEmail = await _userManager.SetEmailAsync(
+                usuario, email);
 
-        return true;
+            if (!cambioEmail.Succeeded)
+            {
+                return false;
+            }
+
+            var cambioUsuario = await _userManager.SetUserNameAsync(
+                usuario, email);
+
+            if (!cambioUsuario.Succeeded)
+            {
+                return false;
+            }
+        }
+
+        var actualizacion = await _userManager.UpdateAsync(usuario);
+
+        return actualizacion.Succeeded;
     }
+
+    // ==========================================================
+    // ELIMINAR
+    // ==========================================================
 
     public async Task<bool> EliminarUsuarioAsync(int idUsuario)
     {
-        await using var context =
-            await _contextFactory.CreateDbContextAsync();
-
-        var usuario = await context.Usuarios
-            .FirstOrDefaultAsync(u => u.Id == idUsuario);
+        var usuario = await _userManager.FindByIdAsync(
+            idUsuario.ToString());
 
         if (usuario == null)
         {
             return false;
         }
+
+        await using var context =
+            await _contextFactory.CreateDbContextAsync();
 
         // Usuario -> SesionEstudio está en Restrict:
         // hay que borrar las sesiones primero.
@@ -157,10 +192,11 @@ public class UsuarioService
 
         context.Materias.RemoveRange(materias);
 
-        context.Usuarios.Remove(usuario);
-
         await context.SaveChangesAsync();
 
-        return true;
+        // DeleteAsync limpia también roles, claims y logins.
+        var eliminacion = await _userManager.DeleteAsync(usuario);
+
+        return eliminacion.Succeeded;
     }
 }
