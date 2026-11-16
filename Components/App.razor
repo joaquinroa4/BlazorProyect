@@ -1,20 +1,118 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    // El tema se guarda también en una cookie para que el HTML salga del
+    // servidor ya con el atributo data-bs-theme. Sin esto, la navegación
+    // mejorada de Blazor reemplaza los atributos de <html> con los del
+    // documento nuevo y borra el tema aplicado por JavaScript.
+    var temaServidor =
+        HttpContextAccessor.HttpContext?.Request.Cookies["studyflow-theme"]
+        == "dark"
+            ? "dark"
+            : "light";
+}
+
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="@temaServidor">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <base href="/" />
+
+    <!--
+        Resuelve el tema antes del primer pintado (evita el flash) y deja
+        la cookie sincronizada para que el servidor pueda renderizarlo.
+        Prioridad: localStorage > cookie/atributo del servidor > sistema.
+    -->
+    <script>
+        (function () {
+            var raiz = document.documentElement;
+
+            function leerGuardado() {
+                try {
+                    return localStorage.getItem("studyflow-theme");
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            function escribirCookie(tema) {
+                try {
+                    document.cookie = "studyflow-theme=" + tema +
+                        "; path=/; max-age=31536000; samesite=lax";
+                } catch (e) { }
+            }
+
+            /* Tema inicial, antes del primer pintado */
+            try {
+                var guardado = leerGuardado();
+                var delServidor = raiz.getAttribute("data-bs-theme");
+
+                var tema = guardado
+                    || delServidor
+                    || (window.matchMedia("(prefers-color-scheme: dark)").matches
+                        ? "dark"
+                        : "light");
+
+                raiz.setAttribute("data-bs-theme", tema);
+
+                try {
+                    localStorage.setItem("studyflow-theme", tema);
+                } catch (e) { }
+
+                escribirCookie(tema);
+            } catch (e) { }
+
+            /*
+               Respaldo para la navegación mejorada de Blazor: al cambiar de
+               página reemplaza los atributos de <html> con los del documento
+               nuevo. Normalmente el servidor ya manda data-bs-theme correcto
+               (cookie), pero si la cookie no está disponible reaplicamos el
+               tema guardado en localStorage.
+            */
+            function reaplicarTema() {
+                var guardado = leerGuardado();
+
+                if (!guardado) {
+                    return;
+                }
+
+                raiz.setAttribute("data-bs-theme", guardado);
+                escribirCookie(guardado);
+            }
+
+            function registrarRespaldo() {
+                if (window.Blazor
+                    && typeof window.Blazor.addEventListener === "function") {
+
+                    window.Blazor.addEventListener("enhancedload", reaplicarTema);
+                } else {
+                    /* blazor.web.js se carga al final del <body> */
+                    window.addEventListener("load", registrarRespaldo, {
+                        once: true
+                    });
+                }
+            }
+
+            registrarRespaldo();
+        })();
+    </script>
+
     <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <RadzenTheme Theme="material" />
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="ProyectoBlazor.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    <RadzenTheme Theme="material" />
     <HeadOutlet />
 </head>
 
 <body>
     <Routes />
+
+    <script src="bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="js/theme.js"></script>
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js?v=@(typeof(Radzen.Colors).Assembly.GetName().Version)"></script>
 </body>
