@@ -22,20 +22,8 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Alerta.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BbGVydGEucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Counter.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Db3VudGVyLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Home.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Materias.razor]
@@ -46,12 +34,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9SZWdpc3Ryby5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Weather.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9XZWF0aGVyLnJhem9y
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Tareas.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9UYXJlYXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Routes.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9Sb3V0ZXMucmF6b3I=
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/RedirectToLogin.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9SZWRpcmVjdFRvTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/_Imports.razor]
@@ -62,6 +50,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL01hdGVyaWFDYXJkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Shared/TareaCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1RhcmVhQ2FyZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Shared/UsuarioCard.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkL1VzdWFyaW9DYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Layout/AuthLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvQXV0aExheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-ix1hx2a0zz
+
 [/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-oxjrgkcf56
@@ -70,6 +70,22 @@ build_metadata.AdditionalFiles.CssScope = b-oxjrgkcf56
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-w8hkn53tic
 
-[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Tarjetas.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9UYXJqZXRhcy5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = b-anxyqb31ws
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/AccesoDenegado.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9BY2Nlc29EZW5lZ2Fkby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-e9mgoyolg7
+
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-yojcnocmfk
+
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Mb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-klambkerma
+
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Pages/Usuarios.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Vc3Vhcmlvcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-g7enypefs9
+
+[/home/joaquin/Documentos/Proyectos .Net/ProyectoBlazor/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9Sb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-shipuehv1q
