@@ -1,0 +1,138 @@
+@inherits LayoutComponentBase
+
+<div class="sf-auth">
+
+    <aside class="sf-auth-brand">
+
+        <a class="sf-auth-logo" href="/">
+
+            <span class="sf-auth-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round">
+
+                    <path d="M22 10L12 5 2 10l10 5 10-5z" />
+                    <path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5" />
+
+                </svg>
+            </span>
+
+            <span>StudyFlow</span>
+
+        </a>
+
+        <div class="sf-auth-pitch">
+
+            <h1>
+                Organizá tu estudio,<br />
+                un paso a la vez.
+            </h1>
+
+            <p>
+                Materias, tareas y seguimiento en un solo lugar,
+                con una vista clara de lo que tenés pendiente.
+            </p>
+
+            <ul class="sf-auth-features">
+
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <path d="M9 11l3 3L22 4" />
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+
+                    </svg>
+
+                    Organizá tus materias con colores propios.
+                </li>
+
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <path d="M8 6h13M8 12h13M8 18h13" />
+                        <path d="M3 6h.01M3 12h.01M3 18h.01" />
+
+                    </svg>
+
+                    Seguí el estado y la prioridad de cada tarea.
+                </li>
+
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <path d="M12 20V10M18 20V4M6 20v-4" />
+
+                    </svg>
+
+                    Visualizá tu avance de un vistazo.
+                </li>
+
+            </ul>
+
+        </div>
+
+        <p class="sf-auth-copy">
+            © @DateTime.Now.Year StudyFlow
+        </p>
+
+    </aside>
+
+    <section class="sf-auth-panel">
+
+        <div class="sf-auth-toolbar">
+
+            <a class="sf-auth-mobile-logo" href="/">
+                <span class="sf-auth-mark sf-auth-mark-sm">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <path d="M22 10L12 5 2 10l10 5 10-5z" />
+                        <path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5" />
+
+                    </svg>
+                </span>
+
+                <span>StudyFlow</span>
+            </a>
+
+            <button type="button"
+                    class="sf-icon-btn sf-theme-toggle"
+                    onclick="sfTheme.toggle()"
+                    title="Cambiar entre modo claro y oscuro"
+                    aria-label="Cambiar entre modo claro y oscuro">
+
+                <svg class="sf-icon-sun" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round">
+
+                    <circle cx="12" cy="12" r="4" />
+                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+
+                </svg>
+
+                <svg class="sf-icon-moon" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
+
+                </svg>
+
+            </button>
+
+        </div>
+
+        <div class="sf-auth-body">
+            @Body
+        </div>
+
+    </section>
+
+</div>
