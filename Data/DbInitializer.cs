@@ -54,6 +54,18 @@ public static class DbInitializer
                 usuario.UserName = usuario.Email;
             }
 
+            // Los usuarios creados por el registro viejo (EF + BCrypt)
+            // no tienen estos sellos y UpdateAsync falla sin ellos.
+            if (string.IsNullOrWhiteSpace(usuario.SecurityStamp))
+            {
+                usuario.SecurityStamp = Guid.NewGuid().ToString();
+            }
+
+            if (string.IsNullOrWhiteSpace(usuario.ConcurrencyStamp))
+            {
+                usuario.ConcurrencyStamp = Guid.NewGuid().ToString();
+            }
+
             usuario.EmailConfirmed = true;
 
             var actualizacion = await userManager.UpdateAsync(usuario);
