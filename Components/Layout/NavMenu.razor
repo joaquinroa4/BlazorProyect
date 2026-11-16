@@ -1,28 +1,164 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">ProyectoBlazor</a>
-    </div>
-</div>
+﻿<div class="sf-sidebar-inner">
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <a class="sf-brand" href="">
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Registros
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="materias">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Materias
-            </NavLink>
-        </div>
-                <div class="nav-item px-3">
-            <NavLink class="nav-link" href="tareas">
-                <span class="bi bi-list-task" aria-hidden="true"></span> Tareas
-            </NavLink>
-        </div>
+        <span class="sf-brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <path d="M22 10L12 5 2 10l10 5 10-5z" />
+                <path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5" />
+            </svg>
+        </span>
+
+        <span class="sf-brand-text">
+            <span class="sf-brand-name">StudyFlow</span>
+            <span class="sf-brand-sub">Organizá tu estudio</span>
+        </span>
+
+    </a>
+
+    <nav class="sf-nav">
+
+        <AuthorizeView>
+
+            <Authorized>
+
+                <div class="sf-nav-section">Principal</div>
+
+                <NavLink class="nav-link sf-nav-link"
+                         href=""
+                         Match="NavLinkMatch.All">
+
+                    <span class="sf-nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+
+                            <path d="M3 10.5L12 3l9 7.5" />
+                            <path d="M5 9.5V21h14V9.5" />
+                            <path d="M9 21v-6h6v6" />
+
+                        </svg>
+                    </span>
+
+                    <span>Inicio</span>
+
+                </NavLink>
+
+                <NavLink class="nav-link sf-nav-link" href="materias">
+
+                    <span class="sf-nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+
+                        </svg>
+                    </span>
+
+                    <span>Materias</span>
+
+                </NavLink>
+
+                <NavLink class="nav-link sf-nav-link" href="tareas">
+
+                    <span class="sf-nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+
+                            <path d="M9 11l3 3L22 4" />
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+
+                        </svg>
+                    </span>
+
+                    <span>Tareas</span>
+
+                </NavLink>
+
+                <AuthorizeView Roles="Admin">
+                    <Authorized Context="adminContext">
+
+                        <div class="sf-nav-section">Administración</div>
+
+                        <NavLink class="nav-link sf-nav-link" href="usuarios">
+
+                            <span class="sf-nav-icon">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+
+                                </svg>
+                            </span>
+
+                            <span>Usuarios</span>
+
+                        </NavLink>
+
+                        <NavLink class="nav-link sf-nav-link" href="registro">
+
+                            <span class="sf-nav-icon">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round">
+
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M20 8v6M23 11h-6" />
+
+                                </svg>
+                            </span>
+
+                            <span>Registrar usuario</span>
+
+                        </NavLink>
+
+                    </Authorized>
+                </AuthorizeView>
+
+            </Authorized>
+
+            <NotAuthorized>
+
+                <div class="sf-nav-section">Acceso</div>
+
+                <NavLink class="nav-link sf-nav-link" href="login">
+
+                    <span class="sf-nav-icon">
+                        <svg viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round">
+
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                            <path d="M10 17l5-5-5-5M15 12H3" />
+
+                        </svg>
+                    </span>
+
+                    <span>Iniciar sesión</span>
+
+                </NavLink>
+
+            </NotAuthorized>
+
+        </AuthorizeView>
+
     </nav>
-</div>
 
+    <div class="sf-sidebar-footer">
+        <span class="sf-version">StudyFlow v1.0</span>
+    </div>
+
+</div>
