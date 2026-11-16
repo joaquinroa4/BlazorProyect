@@ -1,0 +1,208 @@
+/* ==========================================================
+   Layout de autenticación (login)
+   Panel de marca + formulario
+   ========================================================== */
+
+.sf-auth[b-ix1hx2a0zz] {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    min-height: 100vh;
+}
+
+/* ---------- Panel de marca ---------- */
+
+.sf-auth-brand[b-ix1hx2a0zz] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 3rem;
+    overflow: hidden;
+    color: #ffffff;
+    background:
+        radial-gradient(900px 520px at 12% 8%, rgba(255, 255, 255, .20), transparent 60%),
+        radial-gradient(700px 520px at 92% 92%, rgba(14, 165, 233, .55), transparent 55%),
+        linear-gradient(140deg, #312e81 0%, #4f46e5 48%, #0ea5e9 100%);
+}
+
+.sf-auth-brand[b-ix1hx2a0zz]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, .18) 1px, transparent 1px);
+    background-size: 22px 22px;
+    opacity: .35;
+    pointer-events: none;
+}
+
+.sf-auth-brand > *[b-ix1hx2a0zz] {
+    position: relative;
+    z-index: 1;
+}
+
+.sf-auth-logo[b-ix1hx2a0zz] {
+    display: inline-flex;
+    align-items: center;
+    gap: .7rem;
+    align-self: flex-start;
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -.03em;
+    text-decoration: none;
+}
+
+.sf-auth-logo:hover[b-ix1hx2a0zz] {
+    color: #ffffff;
+}
+
+.sf-auth-mark[b-ix1hx2a0zz] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .16);
+    border: 1px solid rgba(255, 255, 255, .28);
+    color: #ffffff;
+    backdrop-filter: blur(4px);
+}
+
+.sf-auth-mark svg[b-ix1hx2a0zz] {
+    width: 24px;
+    height: 24px;
+}
+
+.sf-auth-pitch h1[b-ix1hx2a0zz] {
+    margin-bottom: 1rem;
+    color: #ffffff;
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    line-height: 1.15;
+}
+
+.sf-auth-pitch p[b-ix1hx2a0zz] {
+    max-width: 36ch;
+    margin-bottom: 1.75rem;
+    color: rgba(255, 255, 255, .82);
+    font-size: .95rem;
+}
+
+.sf-auth-features[b-ix1hx2a0zz] {
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sf-auth-features li[b-ix1hx2a0zz] {
+    display: flex;
+    align-items: flex-start;
+    gap: .7rem;
+    color: rgba(255, 255, 255, .92);
+    font-size: .92rem;
+}
+
+.sf-auth-features svg[b-ix1hx2a0zz] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    color: #a5f3fc;
+}
+
+.sf-auth-copy[b-ix1hx2a0zz] {
+    margin: 0;
+    color: rgba(255, 255, 255, .6);
+    font-size: .78rem;
+}
+
+/* ---------- Panel del formulario ---------- */
+
+.sf-auth-panel[b-ix1hx2a0zz] {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.5rem 2rem;
+    background-color: var(--sf-bg);
+}
+
+.sf-auth-toolbar[b-ix1hx2a0zz] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.sf-auth-mobile-logo[b-ix1hx2a0zz] {
+    display: none;
+    align-items: center;
+    gap: .6rem;
+    color: var(--sf-text);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    text-decoration: none;
+}
+
+.sf-auth-mobile-logo:hover[b-ix1hx2a0zz] {
+    color: var(--sf-text);
+}
+
+.sf-auth-mark-sm[b-ix1hx2a0zz] {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    border: none;
+    background: linear-gradient(135deg, var(--sf-brand), var(--sf-accent));
+    color: #ffffff;
+}
+
+.sf-auth-mark-sm svg[b-ix1hx2a0zz] {
+    width: 20px;
+    height: 20px;
+}
+
+.sf-auth-body[b-ix1hx2a0zz] {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 0;
+}
+
+/* ==========================================================
+   Responsive
+   ========================================================== */
+
+@media (max-width: 991.98px) {
+
+    .sf-auth[b-ix1hx2a0zz] {
+        grid-template-columns: 1fr;
+    }
+
+    .sf-auth-brand[b-ix1hx2a0zz] {
+        display: none;
+    }
+
+    .sf-auth-mobile-logo[b-ix1hx2a0zz] {
+        display: inline-flex;
+    }
+
+    .sf-auth-panel[b-ix1hx2a0zz] {
+        min-height: 100vh;
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .sf-auth-panel[b-ix1hx2a0zz] {
+        padding: 1rem;
+    }
+
+    .sf-auth-body[b-ix1hx2a0zz] {
+        padding: .5rem 0;
+    }
+}
