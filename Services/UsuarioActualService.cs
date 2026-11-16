@@ -1,55 +1,38 @@
-using Blazored.LocalStorage;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ProyectoBlazor.Services;
 
 public class UsuarioActualService
 {
-    private readonly ILocalStorageService _localStorage;
-
-    private const string UsuarioIdKey = "usuarioId";
+    private readonly AuthenticationStateProvider _authStateProvider;
 
     public int UsuarioId { get; private set; }
 
-    public UsuarioActualService(ILocalStorageService localStorage)
-    {
-        _localStorage = localStorage;
-    }
+    public string NombreUsuario { get; private set; } = string.Empty;
 
-    public async Task EstablecerUsuarioAsync(int usuarioId) //Operación asincrónica
+    public UsuarioActualService(
+        AuthenticationStateProvider authStateProvider)
     {
-        UsuarioId = usuarioId;
-
-        await _localStorage.SetItemAsync(
-            UsuarioIdKey,
-            usuarioId);
+        _authStateProvider = authStateProvider;
     }
 
     public async Task<bool> CargarUsuarioAsync()
     {
-        if (!await _localStorage.ContainKeyAsync(UsuarioIdKey))
-        {
-            UsuarioId = 0;
-            return false;
+        var estado = await _authStateProvider
+            .GetAuthenticationStateAsync();
 
-        }
-        
-        UsuarioId = await _localStorage.GetItemAsync<int>(
-            UsuarioIdKey);
-        if (UsuarioId <= 0)
-        {
-            UsuarioId = 0;
-            return false;
-        }
+        var id = estado.User.FindFirst(
+            ClaimTypes.NameIdentifier)?.Value;
+
+        UsuarioId = int.TryParse(id, out var valor)
+            ? valor
+            : 0;
+
+        NombreUsuario = estado.User.Identity?.Name
+            ?? string.Empty;
 
         return UsuarioId > 0;
-    }
-
-    public async Task CerrarUsuarioAsync()
-    {
-        UsuarioId = 0;
-
-        await _localStorage.RemoveItemAsync(
-            UsuarioIdKey);
     }
 
     public bool HayUsuarioSeleccionado()
@@ -57,6 +40,3 @@ public class UsuarioActualService
         return UsuarioId > 0;
     }
 }
-
-//Por ahora su única responsabilidad es almacenar en el localsotrage que brinda Blazor la información
-// de qué usuario está utilizando StudyFlow.
