@@ -1,0 +1,144 @@
+/* ---------- Hero ---------- */
+
+.sf-hero {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    overflow: hidden;
+    border: 1px solid var(--sf-border);
+    border-radius: var(--sf-radius);
+    background: linear-gradient(135deg, var(--sf-surface) 0%, var(--sf-surface-2) 100%);
+    box-shadow: var(--sf-shadow-sm);
+}
+
+.sf-hero::before {
+    content: "";
+    position: absolute;
+    top: -140px;
+    right: -100px;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--sf-brand-soft), transparent 70%);
+    pointer-events: none;
+}
+
+.sf-hero-text {
+    position: relative;
+    z-index: 1;
+}
+
+.sf-hero h1 {
+    margin-bottom: .35rem;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+.sf-hero p {
+    margin: 0;
+    color: var(--sf-muted);
+    font-size: .95rem;
+}
+
+.sf-hero .sf-chip {
+    position: relative;
+    z-index: 1;
+}
+
+/* ---------- Tarjetas de acción ---------- */
+
+.sf-action-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    height: 100%;
+    padding: 1.4rem;
+    color: var(--sf-text);
+    text-decoration: none;
+    background-color: var(--sf-surface);
+    border: 1px solid var(--sf-border);
+    border-radius: var(--sf-radius);
+    box-shadow: var(--sf-shadow-sm);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.sf-action-card:hover {
+    color: var(--sf-text);
+    transform: translateY(-3px);
+    border-color: var(--sf-brand);
+    box-shadow: var(--sf-shadow);
+}
+
+.sf-action-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    flex-shrink: 0;
+}
+
+.sf-action-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.sf-icon-indigo {
+    background: rgba(79, 70, 229, .12);
+    color: var(--sf-brand);
+}
+
+.sf-icon-cyan {
+    background: rgba(14, 165, 233, .14);
+    color: var(--sf-accent);
+}
+
+.sf-icon-amber {
+    background: rgba(245, 158, 11, .16);
+    color: #f59e0b;
+}
+
+.sf-action-body {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    min-width: 0;
+}
+
+.sf-action-body h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.sf-action-body p {
+    margin: 0;
+    color: var(--sf-muted);
+    font-size: .85rem;
+    line-height: 1.4;
+}
+
+.sf-action-arrow {
+    display: inline-flex;
+    margin-left: auto;
+    align-self: center;
+    color: var(--sf-muted);
+    opacity: .55;
+    transition: transform .18s ease, opacity .18s ease, color .18s ease;
+}
+
+.sf-action-arrow svg {
+    width: 18px;
+    height: 18px;
+}
+
+.sf-action-card:hover .sf-action-arrow {
+    color: var(--sf-brand);
+    opacity: 1;
+    transform: translateX(3px);
+}
