@@ -1,59 +1,66 @@
 .usuarios-grid-container {
-    border-radius: 10px;
+    border-radius: var(--sf-radius);
     overflow: hidden;
 }
+
 .usuarios-grid-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
-    gap: 20px;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 1.15rem 1.25rem;
+    border-bottom: 1px solid var(--sf-border);
 }
 
 .usuarios-grid-title {
     margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1.02rem;
+    font-weight: 700;
 }
 
 .usuarios-grid-subtitle {
     display: block;
-    margin-top: 4px;
-    color: #6c757d;
-    font-size: 0.85rem;
+    margin-top: .2rem;
+    color: var(--sf-muted);
+    font-size: .82rem;
 }
 
 .usuarios-grid-stats {
     display: flex;
     align-items: baseline;
-    gap: 6px;
+    gap: .35rem;
     white-space: nowrap;
 }
 
 .usuarios-count {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--sf-text);
+    line-height: 1;
 }
 
 .usuarios-count-label {
-    color: #6c757d;
-    font-size: 1.1rem;
+    color: var(--sf-muted);
+    font-size: .95rem;
     font-weight: 400;
 }
 
 .usuarios-grid-toolbar {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
+    gap: .75rem;
+    padding: .85rem 1.25rem;
+    background-color: var(--sf-surface-2);
+    border-bottom: 1px solid var(--sf-border);
 }
 
 .usuarios-search {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: .55rem;
     flex: 1;
-    max-width: 450px;
+    max-width: 460px;
+    color: var(--sf-muted);
 }
 
 .usuarios-search .form-control {
@@ -63,16 +70,21 @@
 .usuarios-grid-toolbar button {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: .4rem;
+    white-space: nowrap;
 }
 
 .usuarios-toolbar-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: .5rem;
 }
 
 @media (max-width: 768px) {
+
+    .usuarios-grid-header {
+        align-items: flex-start;
+    }
 
     .usuarios-grid-toolbar {
         flex-direction: column;
@@ -85,5 +97,6 @@
 
     .usuarios-toolbar-actions {
         justify-content: flex-end;
+        flex-wrap: wrap;
     }
 }
